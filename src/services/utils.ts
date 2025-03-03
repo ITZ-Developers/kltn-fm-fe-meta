@@ -71,6 +71,10 @@ const getEnumItem = (map: any, value: number) =>
     className: "bg-gray-700 text-gray-300",
   };
 
+const getNestedValue = (obj: any, path: string, defaultValue = "") => {
+  return path.split(".").reduce((acc, key) => acc?.[key], obj) ?? defaultValue;
+};
+
 export {
   encrypt,
   decrypt,
@@ -82,4 +86,5 @@ export {
   getMediaImage,
   getRoles,
   getEnumItem,
+  getNestedValue,
 };

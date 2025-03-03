@@ -39,6 +39,12 @@ const METHOD = {
   DELETE: "DELETE",
 };
 
+const ALIGNMENT = {
+  LEFT: "left",
+  RIGHT: "right",
+  CENTER: "center",
+};
+
 const STATUS_MAP = {
   ACTIVE: {
     value: 1,
@@ -54,8 +60,11 @@ const STATUS_MAP = {
   DELETED: { value: -2, label: "Xóa", className: "bg-red-900 text-red-300" },
 };
 
+const ITEMS_PER_PAGE = 10;
+
 export {
   VALID_PATTERN,
+  ALIGNMENT,
   API_URL,
   ENV,
   AUTH_TYPE,
@@ -63,4 +72,5 @@ export {
   METHOD,
   GRANT_TYPE,
   STATUS_MAP,
+  ITEMS_PER_PAGE,
 };

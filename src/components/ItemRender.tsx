@@ -1,26 +1,29 @@
 import { UserIcon } from "lucide-react";
-import { getEnumItem, getMediaImage } from "../services/utils";
-import { STATUS_MAP } from "../services/constant";
+import { getEnumItem, getMediaImage, getNestedValue } from "../services/utils";
+import { ALIGNMENT, STATUS_MAP } from "../services/constant";
 
 const renderImage = ({
   label = "Ảnh",
   accessor = "avatarPath",
-  align = "left",
   Icon = UserIcon,
+  align = ALIGNMENT.LEFT,
+  className = "ml-2",
 }) => {
   return {
     label,
     accessor,
     align,
     render: (item: any) => (
-      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-700">
+      <div
+        className={`${className} flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-700`}
+      >
         {item?.[`${accessor}`] ? (
           <img
             src={getMediaImage(item[`${accessor}`])}
-            className="h-full w-full object-cover"
+            className="object-cover"
           />
         ) : (
-          <Icon size={20} className="text-white" />
+          <Icon size={20} className={`text-white`} />
         )}
       </div>
     ),
@@ -30,7 +33,7 @@ const renderImage = ({
 const renderEnum = ({
   label = "Trạng thái",
   accessor = "status",
-  align = "center",
+  align = ALIGNMENT.CENTER,
   map = STATUS_MAP,
 }) => {
   return {
@@ -38,14 +41,37 @@ const renderEnum = ({
     accessor,
     align,
     render: (item: any) => {
-      const value: any = getEnumItem(map, item.status);
+      const value: any = getEnumItem(map, item[`${accessor}`]);
       return (
-        <span className={`px-2 py-1 rounded-md font-semibold text-sm ${value.className}`}>
-          {value.label}
+        <div className={`text-${align}`}>
+          <span
+            className={`px-2 py-1 rounded-md font-semibold text-sm ${value.className}`}
+          >
+            {value.label}
+          </span>
+        </div>
+      );
+    },
+  };
+};
+
+const renderNestField = ({
+  label = "Default",
+  accessor = "group.name",
+  align = ALIGNMENT.LEFT,
+}) => {
+  return {
+    label,
+    accessor,
+    align,
+    render: (item: any) => {
+      return (
+        <span className={`p-4 text-${align} whitespace-nowrap`}>
+          {getNestedValue(item, accessor)}
         </span>
       );
     },
   };
 };
 
-export { renderImage, renderEnum };
+export { renderImage, renderEnum, renderNestField };

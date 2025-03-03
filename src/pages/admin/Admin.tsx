@@ -1,60 +1,56 @@
-import { useEffect, useState } from "react";
 import GridView from "../../components/page/GridView";
 import Sidebar from "../../components/page/Sidebar";
 import useApi from "../../hooks/useApi";
-import { renderEnum, renderImage } from "../../components/ItemRender";
+import {
+  renderEnum,
+  renderImage,
+  renderNestField,
+} from "../../components/ItemRender";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import InputBox from "../../components/page/InputBox";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../components/GlobalProvider";
-import { LoadingDialog } from "../../components/page/Dialog";
+import { ALIGNMENT, ITEMS_PER_PAGE } from "../../services/constant";
+import { useGridView } from "../../hooks/usePagination";
+import { useState } from "react";
+
+const initQuery = { fullName: "" };
 
 const Admin = () => {
   const { hasRole } = useGlobalContext();
   const navigate = useNavigate();
-  const { admin, loading } = useApi();
-  const [data, setData] = useState([]);
+  const [query, setQuery] = useState(initQuery);
+  const { admin } = useApi();
+  const {
+    data,
+    currentPage,
+    totalPages,
+    handlePageChange,
+    handleClearQuery,
+    handleSubmitQuery,
+  } = useGridView({
+    size: ITEMS_PER_PAGE,
+    fetchListApi: admin.list,
+    initQuery,
+  });
 
   const columns = [
     renderImage({}),
-    { label: "Họ và tên", accessor: "fullName", align: "left" },
-    { label: "Tài khoản", accessor: "username", align: "left" },
+    { label: "Họ và tên", accessor: "fullName", align: ALIGNMENT.LEFT },
+    { label: "Tài khoản", accessor: "username", align: ALIGNMENT.LEFT },
     {
       label: "Email",
       accessor: "email",
-      align: "left",
+      align: ALIGNMENT.LEFT,
     },
+    renderNestField({
+      label: "Vai trò",
+      accessor: "group.name",
+      align: ALIGNMENT.LEFT,
+    }),
     renderEnum({}),
   ];
-
-  const getData = async () => {
-    // const query: any = {
-    //   page: currentPage,
-    //   size: itemsPerPage,
-    // };
-    // if (searchValues.displayName) {
-    //   query.displayName = searchValues.displayName;
-    // }
-    // if (searchValues.email) {
-    //   query.email = searchValues.email;
-    // }
-    // if (searchValues.phone) {
-    //   query.phone = searchValues.phone;
-    // }
-    // if (searchValues.role) {
-    //   query.role = searchValues.role;
-    // }
-    // if (searchValues.status) {
-    //   query.status = searchValues.status;
-    // }
-    const userRes = await admin.list({ fullName: null });
-    setData(userRes.data.content);
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <Sidebar
@@ -69,15 +65,18 @@ const Admin = () => {
           <ToolBar
             searchBoxes={
               <InputBox
-                // value={searchValues.displayName}
-                // onChangeText={(value: any) =>
-                //   setSearchValues({ ...searchValues, displayName: value })
-                // }
+                value={query.fullName}
+                onChangeText={(value: any) =>
+                  setQuery({ ...query, fullName: value })
+                }
                 placeholder="Họ và tên..."
               />
             }
-            onSearch={() => {}}
-            onClear={() => {}}
+            onSearch={() => handleSubmitQuery(query)}
+            onClear={() => {
+              setQuery(initQuery);
+              handleClearQuery();
+            }}
             actionButtons={
               hasRole(PAGE_CONFIG.CREATE_ADMIN.role) ? (
                 <CreateButton
@@ -89,69 +88,11 @@ const Admin = () => {
           <GridView
             data={data}
             columns={columns}
-            currentPage={0}
-            itemsPerPage={1}
-            onPageChange={() => {}}
-            totalPages={0}
+            currentPage={currentPage}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={handlePageChange}
+            totalPages={totalPages}
           />
-          {/* <Header
-            onCreate={onCreateButtonClick}
-            onDeleteAll={handleDeleteAllDialog}
-            onImport={() => {
-              setImportModalVisible(true);
-            }}
-            onExport={() => {
-              onExportButtonClick(getStorageData(GORGEOUS_SWAGGER.name));
-            }}
-            SearchBoxes={
-              <InputBox
-                placeholder="Searching..."
-                icon={SearchIcon}
-                value={searchValue}
-                onChangeText={handleSearch}
-              />
-            }
-          />
-          {data.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {data.map((item) => (
-                  <Card
-                    key={item.id}
-                    item={item}
-                    onExport={(id: any) => {
-                      onExportButtonClick([
-                        getItemById(GORGEOUS_SWAGGER.name, id),
-                      ]);
-                    }}
-                    onUpdate={(id: any) => {
-                      onUpdateButtonClick(id);
-                    }}
-                    onDelete={(id: any) => {
-                      handleDeleteDialog(id);
-                    }}
-                    onConvert={async (id: any) => {
-                      await handleConvert(id);
-                    }}
-                  />
-                ))}
-              </div>
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            </>
-          ) : (
-            <NoData />
-          )} */}
-          {/* <ToastContainer
-            position="bottom-right"
-            style={{ width: "400px" }}
-            theme="dark"
-          /> */}
-          {/* <LoadingDialog isVisible={isLoading} /> */}
-          {/* <LoadingDialog isVisible={loading} /> */}
         </>
       }
     ></Sidebar>

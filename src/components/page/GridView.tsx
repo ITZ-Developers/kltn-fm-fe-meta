@@ -42,11 +42,16 @@ const GridView = ({
                         {index + 1 + currentPage * itemsPerPage}
                       </td>
                       {columns.map((col: any) => (
-                        <td
-                          key={col.accessor}
-                          className={`p-4 text-${col.align} whitespace-nowrap`}
-                        >
-                          {col.render ? col.render(item) : item[col.accessor]}
+                        <td key={col.accessor}>
+                          {col.render ? (
+                            col.render(item)
+                          ) : (
+                            <span
+                              className={`p-4 text-${col.align} whitespace-nowrap`}
+                            >
+                              {item[col.accessor]}
+                            </span>
+                          )}
                         </td>
                       ))}
                     </tr>
