@@ -10,7 +10,6 @@ import { PAGE_CONFIG } from "../../components/PageConfig";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import InputBox from "../../components/page/InputBox";
 import { useNavigate } from "react-router-dom";
-import { useGlobalContext } from "../../components/GlobalProvider";
 import { ALIGNMENT, ITEMS_PER_PAGE } from "../../services/constant";
 import { useGridView } from "../../hooks/usePagination";
 import { useState } from "react";
@@ -18,7 +17,6 @@ import { useState } from "react";
 const initQuery = { fullName: "" };
 
 const Admin = () => {
-  const { hasRole } = useGlobalContext();
   const navigate = useNavigate();
   const [query, setQuery] = useState(initQuery);
   const { admin } = useApi();
@@ -78,11 +76,10 @@ const Admin = () => {
               handleClearQuery();
             }}
             actionButtons={
-              hasRole(PAGE_CONFIG.CREATE_ADMIN.role) ? (
-                <CreateButton
-                  onClick={() => navigate(PAGE_CONFIG.CREATE_ADMIN.path)}
-                />
-              ) : null
+              <CreateButton
+                role={PAGE_CONFIG.CREATE_ADMIN.role}
+                onClick={() => navigate(PAGE_CONFIG.CREATE_ADMIN.path)}
+              />
             }
           />
           <GridView

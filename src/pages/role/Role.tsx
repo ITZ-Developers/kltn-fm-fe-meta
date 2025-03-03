@@ -42,18 +42,8 @@ const Role = () => {
 
   const columns = [
     { label: "Tên vai trò", accessor: "name", align: ALIGNMENT.LEFT },
-    // {
-    //   label: "Email",
-    //   accessor: "email",
-    //   align: ALIGNMENT.LEFT,
-    // },
-    // renderNestField({
-    //   label: "Vai trò",
-    //   accessor: "group.name",
-    //   align: ALIGNMENT.LEFT,
-    // }),
     {
-      label: "Lần cuối cập nhật",
+      label: "Lần cập nhật cuối",
       accessor: "modifiedDate",
       align: ALIGNMENT.LEFT,
     },

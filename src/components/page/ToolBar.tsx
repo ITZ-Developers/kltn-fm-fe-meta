@@ -1,14 +1,21 @@
 import { EraserIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { useGlobalContext } from "../GlobalProvider";
 
-const CreateButton = ({ onClick }: any) => (
-  <button
-    onClick={onClick}
-    className="bg-gray-600 hover:bg-gray-700 text-gray-100 p-3 rounded-lg flex items-center transition-colors duration-200"
-  >
-    <PlusIcon size={20} className="mr-1" />
-    Thêm mới
-  </button>
-);
+const CreateButton = ({ role, onClick }: any) => {
+  const { hasRole } = useGlobalContext();
+  if (role && !hasRole(role)) {
+    return null;
+  }
+  return (
+    <button
+      onClick={onClick}
+      className="bg-gray-600 hover:bg-gray-700 text-gray-100 p-3 rounded-lg flex items-center transition-colors duration-200"
+    >
+      <PlusIcon size={20} className="mr-1" />
+      Thêm mới
+    </button>
+  );
+};
 
 const ToolBar = ({ searchBoxes, onSearch, onClear, actionButtons }: any) => (
   <div className="flex items-center justify-between mb-4">
