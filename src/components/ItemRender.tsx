@@ -35,7 +35,7 @@ const renderEnum = ({
   accessor = "status",
   align = ALIGNMENT.CENTER,
   map = STATUS_MAP,
-}) => {
+}: any) => {
   return {
     label,
     accessor,

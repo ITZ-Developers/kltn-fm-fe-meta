@@ -20,7 +20,7 @@ const GridView = ({
               <table className="w-full bg-gray-800 shadow-lg rounded-lg">
                 <thead className="bg-gray-700 text-gray-200">
                   <tr className="text-sm leading-normal">
-                    <th className="p-4 text-left rounded-tl-lg"></th>
+                    <th className="p-4 text-left rounded-tl-lg">#</th>
                     {columns.map((col: any, index: number) => (
                       <th
                         key={col.accessor}

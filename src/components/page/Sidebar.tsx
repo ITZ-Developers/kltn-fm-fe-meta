@@ -95,13 +95,11 @@ const Sidebar = ({ activeItem, breadcrumbs, renderContent }: any) => {
         </div>
       </div>
       <div className={`flex-1 transition-all duration-300 ml-[20rem]`}>
-        <div className="min-h-screen flex flex-col bg-gray-900">
-          <div className="p-4">
+        <div className="min-h-screen flex flex-col bg-gray-800">
+          <div className="p-4 border-b-2 border-gray-700">
             <MainHeader breadcrumbs={breadcrumbs} />
           </div>
-          <div className="p-4 bg-gray-800 flex-1 overflow-auto">
-            {renderContent}
-          </div>
+          <div className="p-4 flex-1 overflow-auto">{renderContent}</div>
         </div>
       </div>
     </div>

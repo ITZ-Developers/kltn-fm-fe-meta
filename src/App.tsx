@@ -9,7 +9,8 @@ import useApi from "./hooks/useApi";
 import RedirectHome from "./components/RedirectHome";
 
 const App = () => {
-  const { profile, setProfile, getRouters } = useGlobalContext();
+  const { profile, getSidebarMenus, setProfile, getRouters } =
+    useGlobalContext();
   const { auth, loading } = useApi();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const App = () => {
         <>
           <BrowserRouter>
             <Routes>
-              {profile ? (
+              {profile && getSidebarMenus().length > 0 ? (
                 <>
                   <Route path="/" element={<RedirectHome />} />
                   {getRouters().map(({ path, element }) => (

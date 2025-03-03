@@ -60,6 +60,19 @@ const STATUS_MAP = {
   DELETED: { value: -2, label: "Xóa", className: "bg-red-900 text-red-300" },
 };
 
+const GROUP_KIND_MAP = {
+  ADMIN: {
+    value: 1,
+    label: "Quản trị viên",
+    className: "bg-blue-900 text-blue-300",
+  },
+  CUSTOMER: {
+    value: 2,
+    label: "Khách hàng",
+    className: "bg-yellow-900 text-yellow-300",
+  },
+};
+
 const ITEMS_PER_PAGE = 10;
 
 export {
@@ -73,4 +86,5 @@ export {
   GRANT_TYPE,
   STATUS_MAP,
   ITEMS_PER_PAGE,
+  GROUP_KIND_MAP,
 };
