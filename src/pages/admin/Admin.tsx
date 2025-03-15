@@ -65,6 +65,9 @@ const Admin = () => {
       accessor: "fullName",
       align: ALIGNMENT.LEFT,
       role: PAGE_CONFIG.ACCOUNT_BRANCH.role,
+      onClick: (item: any) => {
+        navigate(`/admin/account-branch/${item.id}`, { state: { query } });
+      },
     }),
     { label: "Tài khoản", accessor: "username", align: ALIGNMENT.LEFT },
     {

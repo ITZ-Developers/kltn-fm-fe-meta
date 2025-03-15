@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const useForm = (initialValues: any, validate: (form: any) => any) => {
   const [form, setForm] = useState(initialValues);
-  const [errors, setErrors] = useState(initialValues);
+  const [errors, setErrors] = useState<any>({});
 
   const handleChange = (field: any, value: any) => {
     setForm((prevForm: any) => ({ ...prevForm, [field]: value }));
@@ -25,7 +25,7 @@ const useForm = (initialValues: any, validate: (form: any) => any) => {
 
   const resetForm = () => {
     setForm(initialValues);
-    setErrors(initialValues);
+    setErrors({});
   };
 
   return {

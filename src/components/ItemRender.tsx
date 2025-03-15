@@ -89,7 +89,7 @@ const renderHrefLink = ({
     accessor,
     align,
     render: (item: any) => {
-      if (role && !hasRole(role)) {
+      if (!onClick || (role && !hasRole(role))) {
         return (
           <span className={`text-gray-300 p-4 text-${align} whitespace-nowrap`}>
             {item[accessor]}
@@ -99,7 +99,7 @@ const renderHrefLink = ({
       return (
         <a
           className={`text-blue-600 hover:underline p-4 text-${align} whitespace-nowrap hover:cursor-pointer`}
-          onClick={onClick}
+          onClick={() => onClick(item)}
         >
           {item[accessor]}
         </a>

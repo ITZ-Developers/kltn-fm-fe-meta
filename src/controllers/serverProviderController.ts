@@ -1,10 +1,10 @@
 import { API_URL, AUTH_TYPE, METHOD } from "../services/constant.ts";
 
-export const branchController = (fetchApi: any) => {
+export const serverProviderController = (fetchApi: any) => {
   const list = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: "/v1/branch/list",
+      endpoint: "/v1/server-provider/list",
       method: METHOD.GET,
       payload,
       authType: AUTH_TYPE.BEARER,
@@ -13,7 +13,7 @@ export const branchController = (fetchApi: any) => {
   const autoComplete = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: "/v1/branch/auto-complete",
+      endpoint: "/v1/server-provider/auto-complete",
       method: METHOD.GET,
       payload,
       authType: AUTH_TYPE.BEARER,
@@ -22,7 +22,7 @@ export const branchController = (fetchApi: any) => {
   const get = (id: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: `/v1/branch/get/${id}`,
+      endpoint: `/v1/server-provider/get/${id}`,
       method: METHOD.GET,
       authType: AUTH_TYPE.BEARER,
     });
@@ -30,7 +30,7 @@ export const branchController = (fetchApi: any) => {
   const create = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: `/v1/branch/create`,
+      endpoint: `/v1/server-provider/create`,
       method: METHOD.POST,
       payload,
       authType: AUTH_TYPE.BEARER,
@@ -39,7 +39,7 @@ export const branchController = (fetchApi: any) => {
   const update = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: `/v1/branch/update`,
+      endpoint: `/v1/server-provider/update`,
       method: METHOD.PUT,
       payload,
       authType: AUTH_TYPE.BEARER,
@@ -48,7 +48,7 @@ export const branchController = (fetchApi: any) => {
   const del = (id: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: `/v1/branch/delete/${id}`,
+      endpoint: `/v1/server-provider/delete/${id}`,
       method: METHOD.DELETE,
       authType: AUTH_TYPE.BEARER,
     });

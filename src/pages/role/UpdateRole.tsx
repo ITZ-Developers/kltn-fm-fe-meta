@@ -104,7 +104,7 @@ const UpdateRole = () => {
       if (res.result) {
         handleNavigateBack();
       } else {
-        toast.error(res.message);
+        toast.error(res.message || BASIC_MESSAGES.FAILED);
       }
     } else {
       toast.error(BASIC_MESSAGES.INVALID_FORM);
@@ -122,7 +122,7 @@ const UpdateRole = () => {
           label: PAGE_CONFIG.UPDATE_ROLE.label,
         },
       ]}
-      activeItem={PAGE_CONFIG.ADMIN.name}
+      activeItem={PAGE_CONFIG.ROLE.name}
       renderContent={
         <>
           <FormCard

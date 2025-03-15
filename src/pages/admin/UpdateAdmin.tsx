@@ -110,7 +110,7 @@ const UpdateAdmin = () => {
       if (res.result) {
         handleNavigateBack();
       } else {
-        toast.error(res.message);
+        toast.error(res.message || BASIC_MESSAGES.FAILED);
       }
     } else {
       toast.error(BASIC_MESSAGES.INVALID_FORM);

@@ -114,13 +114,13 @@ const configDeleteDialog = ({
     message: "Bạn có chắc chắn muốn xóa?",
     color: "crimson",
     onConfirm: async () => {
+      hideModal();
       const res = await deleteApi();
       if (res.result) {
-        hideModal();
         toast.success(BASIC_MESSAGES.DELETED);
         await refreshData();
       } else {
-        toast.error(res.message);
+        toast.error(res.message || BASIC_MESSAGES.FAILED);
       }
     },
     confirmText: BUTTON_TEXT.DELETE,
@@ -146,7 +146,7 @@ const configModalForm = ({
         toast.success(successMessage);
         await refreshData();
       } else {
-        toast.error(res.message);
+        toast.error(res.message || BASIC_MESSAGES.FAILED);
       }
     },
     hideModal,

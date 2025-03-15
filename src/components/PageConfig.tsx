@@ -9,6 +9,9 @@ import Profile from "../pages/profile/Profile";
 import ChangePassword from "../pages/profile/ChangePassword";
 import AccountBranch from "../pages/branch/AccountBranch";
 import Branch from "../pages/branch/Branch";
+import ServerProvider from "../pages/provider/ServerProvider";
+import CreateServerProvider from "../pages/provider/CreateServerProvider";
+import UpdateServerProvider from "../pages/provider/UpdateServerProvider";
 
 const ADMIN_CONFIG = {
   ADMIN: {
@@ -39,17 +42,17 @@ const ADMIN_CONFIG = {
 const ACCOUNT_BRANCH_CONFIG = {
   ACCOUNT_BRANCH: {
     name: "account_branch",
-    label: "Phân chi nhánh",
+    label: "Quản lý chi nhánh",
     path: "/admin/account-branch/:adminId",
     role: "ACC_B_L",
     element: <AccountBranch />,
   },
   CREATE_ACCOUNT_BRANCH: {
-    label: "Thêm chi nhánh",
+    label: "Phân quyền chi nhánh",
     role: "ACC_B_C",
   },
   DELETE_ACCOUNT_BRANCH: {
-    label: "Xóa chi nhánh",
+    label: "Xóa quyền chi nhánh",
     role: "ACC_B_D",
   },
 };
@@ -118,6 +121,32 @@ const BRANCH_CONFIG = {
   },
 };
 
+const SERVER_PROVIDER_CONFIG = {
+  SERVER_PROVIDER: {
+    name: "server_provider",
+    label: "Máy chủ",
+    path: "/server-provider",
+    role: "SE_P_L",
+    element: <ServerProvider />,
+  },
+  CREATE_SERVER_PROVIDER: {
+    label: "Thêm máy chủ",
+    path: "/server-provider/create",
+    role: "SE_P_C",
+    element: <CreateServerProvider />,
+  },
+  UPDATE_SERVER_PROVIDER: {
+    label: "Cập nhật máy chủ",
+    path: "/server-provider/update/:id",
+    role: "SE_P_U",
+    element: <UpdateServerProvider />,
+  },
+  DELETE_SERVER_PROVIDER: {
+    label: "Xóa máy chủ",
+    role: "SE_P_D",
+  },
+};
+
 const PAGE_CONFIG = {
   ...ADMIN_CONFIG,
   ...ACCOUNT_BRANCH_CONFIG,
@@ -125,6 +154,7 @@ const PAGE_CONFIG = {
   ...PROFILE_CONFIG,
   ...CUSTOMER_CONFIG,
   ...BRANCH_CONFIG,
+  ...SERVER_PROVIDER_CONFIG,
 };
 
 const SIDEBAR_MENUS = [
@@ -136,7 +166,7 @@ const SIDEBAR_MENUS = [
   {
     name: "Hệ thống",
     icon: <BoltIcon size={20} />,
-    items: [PAGE_CONFIG.BRANCH, PAGE_CONFIG.ROLE],
+    items: [PAGE_CONFIG.BRANCH, PAGE_CONFIG.SERVER_PROVIDER, PAGE_CONFIG.ROLE],
   },
 ];
 

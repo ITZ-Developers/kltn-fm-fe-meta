@@ -1,3 +1,6 @@
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useState } from "react";
+
 const InputField = ({
   title = "",
   isRequired = false,
@@ -9,6 +12,9 @@ const InputField = ({
   maxLength = 100,
   disabled = false,
 }: any) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const inputType = type === "password" && showPassword ? "text" : type;
+
   return (
     <div className="flex-1 items-center">
       {title && (
@@ -18,7 +24,7 @@ const InputField = ({
         </label>
       )}
       <div
-        className={`flex items-center border rounded-md p-2 flex-1 ${
+        className={`flex items-center border rounded-md p-2 flex-1 relative ${
           error
             ? "border-red-500 bg-red-900/20"
             : disabled
@@ -28,7 +34,7 @@ const InputField = ({
       >
         <input
           disabled={disabled}
-          className={`flex-1 text-base outline-none bg-transparent ${
+          className={`flex-1 text-base outline-none bg-transparent pr-10 ${
             error
               ? "text-red-400 placeholder-red-400/50"
               : disabled
@@ -38,9 +44,21 @@ const InputField = ({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChangeText(e.target.value)}
-          type={type}
+          type={inputType}
           maxLength={maxLength}
+          step={type === "number" ? "1" : undefined}
+          min={type === "number" ? "0" : undefined}
         />
+
+        {type === "password" && (
+          <button
+            type="button"
+            className="absolute right-2 text-gray-400 hover:text-gray-200 focus:outline-none"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOffIcon size={20} /> : <EyeIcon size={20} />}
+          </button>
+        )}
       </div>
       {error && <p className="text-red-400 text-sm mt-1 text-left">{error}</p>}
     </div>
