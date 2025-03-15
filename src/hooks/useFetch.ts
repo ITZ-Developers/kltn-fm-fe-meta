@@ -77,9 +77,10 @@ const useFetch = () => {
     if (options.method === METHOD.GET && options.payload) {
       const filteredPayload = Object.fromEntries(
         Object.entries(options.payload).filter(
-          ([_, value]: any) =>
-            (value !== null && value !== undefined) ||
-            (typeof value === "string" && value.trim() !== "")
+          ([_, value]) =>
+            value !== null &&
+            value !== undefined &&
+            !(typeof value === "string" && value.trim() === "")
         )
       );
       const queryString = new URLSearchParams(

@@ -1,11 +1,15 @@
-import { LockIcon, UserCircleIcon } from "lucide-react";
 import { useState } from "react";
 import useForm from "../hooks/useForm";
 import { toast } from "react-toastify";
-import InputField from "../components/form/InputField";
-import Button from "../components/form/Button";
+import { InputField } from "../components/form/InputField";
+import { Button } from "../components/form/Button";
 import { LoadingDialog } from "../components/page/Dialog";
-import { GRANT_TYPE, LOCAL_STORAGE } from "../services/constant";
+import {
+  BASIC_MESSAGES,
+  BUTTON_TEXT,
+  GRANT_TYPE,
+  LOCAL_STORAGE,
+} from "../services/constant";
 import { setStorageData } from "../services/storages";
 import MyToastContainer from "../components/page/MyToastContainer";
 import useApi from "../hooks/useApi";
@@ -38,8 +42,10 @@ const Login = () => {
         setStorageData(LOCAL_STORAGE.ACCESS_TOKEN, res?.access_token);
         window.location.href = "/";
       } else {
-        toast.error("Tên đăng nhập hoặc mật khẩu không đúng");
+        toast.error("Đăng nhập thất bại");
       }
+    } else {
+      toast.error(BASIC_MESSAGES.INVALID_FORM);
     }
   };
 
@@ -52,27 +58,29 @@ const Login = () => {
         <div className="space-y-3">
           <InputField
             title="Tên đăng nhập"
-            isRequire={true}
+            isRequired={true}
             placeholder="Nhập tên đăng nhập"
             onChangeText={(value: any) => handleChange("username", value)}
             value={form.username}
-            icon={UserCircleIcon}
             error={errors.username}
           />
           <InputField
             title="Mật khẩu"
-            isRequire={true}
+            isRequired={true}
             placeholder="Nhập mật khẩu"
             onChangeText={(value: any) => handleChange("password", value)}
             value={form.password}
-            icon={LockIcon}
             secureTextEntry={!showPassword}
             togglePassword={() => setShowPassword(!showPassword)}
             showPassword={showPassword}
             error={errors.password}
             type="password"
           />
-          <Button title="ĐĂNG NHẬP" color="royalblue" onPress={handleSubmit} />
+          <Button
+            title={BUTTON_TEXT.LOGIN}
+            color="royalblue"
+            onPress={handleSubmit}
+          />
         </div>
       </div>
       <LoadingDialog isVisible={loading} />

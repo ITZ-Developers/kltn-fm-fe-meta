@@ -4,7 +4,7 @@ const MyToastContainer = () => {
   return (
     <ToastContainer
       position="bottom-right"
-      style={{ width: "400px" }}
+      style={{ width: "300px" }}
       theme="dark"
     />
   );

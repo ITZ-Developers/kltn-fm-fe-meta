@@ -22,8 +22,28 @@ export const authController = (fetchApi: any) => {
       authType: AUTH_TYPE.BEARER,
     });
 
+  const updateProfile = (payload: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/account/update-profile-admin",
+      method: METHOD.PUT,
+      payload,
+      authType: AUTH_TYPE.BEARER,
+    });
+
+  const changePassword = (payload: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/account/change-profile-password",
+      method: METHOD.PUT,
+      payload,
+      authType: AUTH_TYPE.BEARER,
+    });
+
   return {
     login,
     profile,
+    updateProfile,
+    changePassword,
   };
 };

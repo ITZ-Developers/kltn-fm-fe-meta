@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useGlobalContext } from "./components/GlobalProvider";
 import Loading from "./pages/Loading";
 import Login from "./pages/Login";
-import Profile from "./pages/Profile";
 import useApi from "./hooks/useApi";
 import RedirectHome from "./components/RedirectHome";
 
@@ -39,7 +38,6 @@ const App = () => {
                   {getRouters().map(({ path, element }) => (
                     <Route key={path} path={path} element={element} />
                   ))}
-                  <Route path="/profile" element={<Profile />} />
                 </>
               ) : (
                 <>

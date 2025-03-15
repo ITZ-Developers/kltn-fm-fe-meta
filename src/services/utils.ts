@@ -28,6 +28,28 @@ const getCurrentDate_2 = () => {
   return `${day}${month}${year}.${hours}${minutes}${seconds}`;
 };
 
+const convertUtcToVn = (date: string) => {
+  const [datePart, timePart] = date.split(" ");
+  const [day, month, year] = datePart.split("/").map(Number);
+
+  const isoString = new Date(
+    Date.UTC(year, month - 1, day, ...timePart.split(":").map(Number))
+  );
+
+  const vnTime = new Intl.DateTimeFormat("vi-VN", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(isoString);
+
+  return vnTime;
+};
+
 const encrypt = (value: any, secretKey: any) => {
   return CryptoJS.AES.encrypt(value, secretKey).toString();
 };
@@ -87,4 +109,5 @@ export {
   getRoles,
   getEnumItem,
   getNestedValue,
+  convertUtcToVn,
 };

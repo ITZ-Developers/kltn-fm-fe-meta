@@ -1,3 +1,6 @@
+import { BASIC_MESSAGES, BUTTON_TEXT } from "../../services/constant";
+import { CancelButton, SubmitButton } from "../form/Button";
+
 const ModalForm = ({ children, isVisible, color, title, message }: any) => {
   if (!isVisible) return null;
   return (
@@ -17,35 +20,35 @@ const ModalForm = ({ children, isVisible, color, title, message }: any) => {
 
 const ConfirmationDialog = ({
   isVisible,
-  title,
-  message,
-  color = "#22c55e",
-  onConfirm,
-  confirmText = "Accept",
-  onCancel,
+  formConfig = {
+    title: "Title",
+    message: "Message",
+    color: "#22c55e",
+    onConfirm: () => {},
+    confirmText: "Accept",
+    onCancel: () => {},
+  },
 }: any) => {
   return (
     <ModalForm
       isVisible={isVisible}
-      title={title}
-      message={message}
-      color={color}
+      title={formConfig.title}
+      message={formConfig.message}
+      color={formConfig.color}
     >
-      <div className="flex flex-col items-center w-full max-w-md px-4">
-        <div className="flex gap-2 w-full mt-4">
-          <button
-            onClick={onCancel}
-            className="p-3 rounded-md bg-gray-800 w-full text-gray-200 text-center text-lg font-semibold hover:bg-gray-700"
-          >
-            Hủy
-          </button>
-          <button
-            onClick={onConfirm}
-            className="p-3 rounded-md w-full text-gray-200 text-center text-lg font-semibold hover:opacity-90"
-            style={{ backgroundColor: color }}
-          >
-            {confirmText}
-          </button>
+      <div className="flex flex-col w-full min-w-[20rem]">
+        <div className="flex items-center justify-end">
+          <div className="flex flex-row space-x-2">
+            <CancelButton
+              onClick={formConfig.onCancel}
+              text={BUTTON_TEXT.CANCEL}
+            />
+            <SubmitButton
+              onClick={formConfig.onConfirm}
+              text={formConfig.confirmText}
+              color={formConfig.color}
+            />
+          </div>
         </div>
       </div>
     </ModalForm>
@@ -99,4 +102,62 @@ const LoadingDialog = ({
   );
 };
 
-export { ConfirmationDialog, AlertDialog, LoadingDialog };
+const configDeleteDialog = ({
+  label,
+  deleteApi,
+  refreshData,
+  hideModal,
+  toast,
+}: any) => {
+  return {
+    title: label,
+    message: "Bạn có chắc chắn muốn xóa?",
+    color: "crimson",
+    onConfirm: async () => {
+      const res = await deleteApi();
+      if (res.result) {
+        hideModal();
+        toast.success(BASIC_MESSAGES.DELETED);
+        await refreshData();
+      } else {
+        toast.error(res.message);
+      }
+    },
+    confirmText: BUTTON_TEXT.DELETE,
+    onCancel: hideModal,
+  };
+};
+
+const configModalForm = ({
+  label,
+  fetchApi,
+  refreshData,
+  hideModal,
+  successMessage,
+  toast,
+  initForm,
+}: any) => {
+  return {
+    title: label,
+    onButtonClick: async (form: any) => {
+      const res = await fetchApi(form);
+      if (res.result) {
+        hideModal();
+        toast.success(successMessage);
+        await refreshData();
+      } else {
+        toast.error(res.message);
+      }
+    },
+    hideModal,
+    initForm,
+  };
+};
+
+export {
+  ConfirmationDialog,
+  AlertDialog,
+  LoadingDialog,
+  configDeleteDialog,
+  configModalForm,
+};

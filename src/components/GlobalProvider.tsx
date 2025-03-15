@@ -52,18 +52,20 @@ export const GlobalProvider = ({ children }: any) => {
   useEffect(() => {
     if (profile) {
       const data: any = jwtDecode(getStorageData(LOCAL_STORAGE.ACCESS_TOKEN));
-      setAuthorities(getRoles(data?.authorities));
+      setAuthorities(getRoles(data?.authorities || []));
     }
   }, [profile]);
 
   const getRouters = () => {
-    return Object.values(PAGE_CONFIG).filter((route) =>
-      authorities.some((auth: string) => auth === route.role)
+    return Object.values(PAGE_CONFIG).filter((route: any) =>
+      authorities.some(
+        (auth: string) => route.path && (!route.role || auth === route.role)
+      )
     );
   };
 
   const getSidebarMenus = () => {
-    const allowedRoutes = new Set(getRouters().map((route) => route.name));
+    const allowedRoutes = new Set(getRouters().map((route: any) => route.name));
     return SIDEBAR_MENUS.map((group) => ({
       ...group,
       items: group.items.filter((item) => allowedRoutes.has(item.name)),

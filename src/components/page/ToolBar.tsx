@@ -1,5 +1,6 @@
 import { EraserIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { useGlobalContext } from "../GlobalProvider";
+import { BUTTON_TEXT } from "../../services/constant";
 
 const CreateButton = ({ role, onClick }: any) => {
   const { hasRole } = useGlobalContext();
@@ -9,10 +10,10 @@ const CreateButton = ({ role, onClick }: any) => {
   return (
     <button
       onClick={onClick}
-      className="bg-gray-600 hover:bg-gray-700 text-gray-100 p-3 rounded-lg flex items-center transition-colors duration-200"
+      className="bg-gray-600 hover:bg-gray-700 text-gray-100 p-2 rounded-lg flex items-center transition-colors duration-200"
     >
       <PlusIcon size={20} className="mr-1" />
-      Thêm mới
+      {BUTTON_TEXT.CREATE}
     </button>
   );
 };
@@ -24,19 +25,19 @@ const ToolBar = ({ searchBoxes, onSearch, onClear, actionButtons }: any) => (
       {onSearch && (
         <button
           onClick={onSearch}
-          className="bg-blue-800 hover:bg-blue-900 text-gray-100 p-3 rounded-lg flex items-center mr-2 whitespace-nowrap transition-colors duration-200"
+          className="bg-blue-800 hover:bg-blue-900 text-gray-100 p-2 rounded-lg flex items-center mr-2 whitespace-nowrap transition-colors duration-200"
         >
           <SearchIcon size={20} />
-          <span className="ml-1">Tìm kiếm</span>
+          <span className="ml-1">{BUTTON_TEXT.SEARCH}</span>
         </button>
       )}
       {onClear && (
         <button
           onClick={onClear}
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800 p-3 rounded-lg flex items-center transition-colors duration-200"
+          className="bg-gray-200 hover:bg-gray-300 text-gray-800 p-2 rounded-lg flex items-center transition-colors duration-200"
         >
           <EraserIcon size={20} />
-          <span className="ml-1">Xóa</span>
+          <span className="ml-1">{BUTTON_TEXT.DELETE}</span>
         </button>
       )}
     </div>

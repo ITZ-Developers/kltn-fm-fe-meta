@@ -1,11 +1,8 @@
 import notFoundImage from "../assets/error_404.png";
-import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
-  const navigate = useNavigate();
-
   const handleGoHome = () => {
-    navigate("/");
+    window.location.href = "/";
   };
 
   return (
@@ -17,7 +14,7 @@ const NotFound = () => {
       <p className="text-lg text-gray-100 mt-2">Úi! Trang này không tồn tại</p>
       <button
         onClick={handleGoHome}
-        className="group relative px-6 py-3 bg-blue-600 text-white font-medium rounded-lg 
+        className="group relative px-6 py-2 bg-blue-600 text-white font-medium rounded-lg 
                   hover:bg-blue-700 transition-all duration-300 ease-in-out
                   overflow-hidden shadow-lg hover:shadow-xl"
       >

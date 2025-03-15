@@ -31,6 +31,7 @@ const useForm = (initialValues: any, validate: (form: any) => any) => {
   return {
     form,
     errors,
+    resetForm,
     setForm,
     setErrors,
     handleChange,

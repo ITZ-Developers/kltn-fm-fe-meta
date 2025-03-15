@@ -1,6 +1,7 @@
 import { UserIcon } from "lucide-react";
 import { getEnumItem, getMediaImage, getNestedValue } from "../services/utils";
 import { ALIGNMENT, STATUS_MAP } from "../services/constant";
+import { useGlobalContext } from "./GlobalProvider";
 
 const renderImage = ({
   label = "Ảnh",
@@ -34,14 +35,14 @@ const renderEnum = ({
   label = "Trạng thái",
   accessor = "status",
   align = ALIGNMENT.CENTER,
-  map = STATUS_MAP,
+  dataMap = STATUS_MAP,
 }: any) => {
   return {
     label,
     accessor,
     align,
     render: (item: any) => {
-      const value: any = getEnumItem(map, item[`${accessor}`]);
+      const value: any = getEnumItem(dataMap, item[`${accessor}`]);
       return (
         <div className={`text-${align}`}>
           <span
@@ -74,4 +75,37 @@ const renderNestField = ({
   };
 };
 
-export { renderImage, renderEnum, renderNestField };
+const renderHrefLink = ({
+  label = "Họ và tên",
+  accessor = "fullName",
+  align = ALIGNMENT.LEFT,
+  onClick,
+  role,
+}: any) => {
+  const { hasRole } = useGlobalContext();
+
+  return {
+    label,
+    accessor,
+    align,
+    render: (item: any) => {
+      if (role && !hasRole(role)) {
+        return (
+          <span className={`text-gray-300 p-4 text-${align} whitespace-nowrap`}>
+            {item[accessor]}
+          </span>
+        );
+      }
+      return (
+        <a
+          className={`text-blue-600 hover:underline p-4 text-${align} whitespace-nowrap hover:cursor-pointer`}
+          onClick={onClick}
+        >
+          {item[accessor]}
+        </a>
+      );
+    },
+  };
+};
+
+export { renderImage, renderEnum, renderNestField, renderHrefLink };

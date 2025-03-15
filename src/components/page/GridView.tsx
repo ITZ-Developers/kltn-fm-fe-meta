@@ -1,5 +1,31 @@
+import { useGlobalContext } from "../GlobalProvider";
 import NoData from "./NoData";
 import Pagination from "./Pagination";
+
+const ActionButton = ({
+  onClick,
+  Icon,
+  color,
+  role,
+  title = "Sample",
+}: any) => {
+  const { hasRole } = useGlobalContext();
+
+  if (role && !hasRole(role)) {
+    return null;
+  }
+
+  return (
+    <button
+      className={`p-1 hover:opacity-90`}
+      onClick={onClick}
+      title={title}
+      style={{ color }}
+    >
+      <Icon size={16} />
+    </button>
+  );
+};
 
 const GridView = ({
   data,
@@ -75,4 +101,4 @@ const GridView = ({
   );
 };
 
-export default GridView;
+export { GridView, ActionButton };

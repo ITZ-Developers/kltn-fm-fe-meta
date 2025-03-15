@@ -1,43 +1,36 @@
-import GridView from "../../components/page/GridView";
+import { GridView } from "../../components/page/GridView";
 import Sidebar from "../../components/page/Sidebar";
 import useApi from "../../hooks/useApi";
-import {
-  renderEnum,
-  renderImage,
-  renderNestField,
-} from "../../components/ItemRender";
+import { renderEnum } from "../../components/ItemRender";
 import { PAGE_CONFIG } from "../../components/PageConfig";
-import { CreateButton, ToolBar } from "../../components/page/ToolBar";
+import { ToolBar } from "../../components/page/ToolBar";
 import InputBox from "../../components/page/InputBox";
-import { useNavigate } from "react-router-dom";
-import { useGlobalContext } from "../../components/GlobalProvider";
 import {
   ALIGNMENT,
   GROUP_KIND_MAP,
   ITEMS_PER_PAGE,
-  STATUS_MAP,
 } from "../../services/constant";
-import { useGridView } from "../../hooks/usePagination";
-import { useState } from "react";
+import { useGridView } from "../../hooks/useGridView";
+import { ActionEditButton } from "../../components/form/Button";
+import { useLocation, useNavigate } from "react-router-dom";
+import { convertUtcToVn } from "../../services/utils";
 
-const initQuery = { name: "" };
+const initQuery = { name: "", page: 0, size: ITEMS_PER_PAGE };
 
 const Role = () => {
-  const { hasRole } = useGlobalContext();
+  const { state } = useLocation();
   const navigate = useNavigate();
-  const [query, setQuery] = useState(initQuery);
   const { role } = useApi();
   const {
     data,
-    currentPage,
+    query,
+    setQuery,
     totalPages,
     handlePageChange,
-    handleClearQuery,
     handleSubmitQuery,
   } = useGridView({
-    size: ITEMS_PER_PAGE,
     fetchListApi: role.list,
-    initQuery,
+    initQuery: state?.query || initQuery,
   });
 
   const columns = [
@@ -46,13 +39,39 @@ const Role = () => {
       label: "Lần cập nhật cuối",
       accessor: "modifiedDate",
       align: ALIGNMENT.LEFT,
+      render: (item: any) => {
+        return (
+          <span
+            className={`text-gray-300 p-4 text-${ALIGNMENT.LEFT} whitespace-nowrap`}
+          >
+            {convertUtcToVn(item.modifiedDate)}
+          </span>
+        );
+      },
     },
     renderEnum({
       label: "Loại",
       accessor: "kind",
       align: ALIGNMENT.CENTER,
-      map: GROUP_KIND_MAP,
+      dataMap: GROUP_KIND_MAP,
     }),
+    {
+      label: "Hành động",
+      accessor: "action",
+      align: ALIGNMENT.CENTER,
+      render: (item: any) => {
+        return (
+          <span className="flex items-center text-center justify-center space-x-2">
+            <ActionEditButton
+              role={PAGE_CONFIG.UPDATE_ROLE.role}
+              onClick={() =>
+                navigate(`/role/update/${item.id}`, { state: { query } })
+              }
+            />
+          </span>
+        );
+      },
+    },
   ];
 
   return (
@@ -75,16 +94,13 @@ const Role = () => {
                 placeholder="Tên vai trò..."
               />
             }
-            onSearch={() => handleSubmitQuery(query)}
-            onClear={() => {
-              setQuery(initQuery);
-              handleClearQuery();
-            }}
+            onSearch={async () => await handleSubmitQuery(query)}
+            onClear={async () => await handleSubmitQuery(initQuery)}
           />
           <GridView
             data={data}
             columns={columns}
-            currentPage={currentPage}
+            currentPage={query.page}
             itemsPerPage={ITEMS_PER_PAGE}
             onPageChange={handlePageChange}
             totalPages={totalPages}

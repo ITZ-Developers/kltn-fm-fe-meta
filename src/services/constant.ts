@@ -1,6 +1,9 @@
 const VALID_PATTERN = {
+  NAME: /^[\p{L}][\p{L} ]*[\p{L}]$/u,
   EMAIL: /^(?!.*[.]{2,})[a-zA-Z0-9.%]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   PHONE: /^0[35789][0-9]{8}$/,
+  USERNAME: /^(?=.{3,20}$)(?!.*[_.]{2})[a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]$/,
+  PASSWORD: /^[a-zA-Z0-9!@#$%^&*()_+\-=]{6,}$/,
 };
 
 const API_URL = {
@@ -74,6 +77,29 @@ const GROUP_KIND_MAP = {
 };
 
 const ITEMS_PER_PAGE = 10;
+const FETCH_INTERVAL = 300;
+
+const FILE_TYPES = {
+  AVATAR: "AVATAR",
+  DOCUMENT: "DOCUMENT",
+};
+
+const BASIC_MESSAGES = {
+  INVALID_FORM: "Vui lòng kiểm tra lại thông tin",
+  FAILED: "Yêu cầu thất bại",
+  CREATED: "Thêm thành công",
+  UPDATED: "Cập nhật thành công",
+  DELETED: "Xóa thành công",
+};
+
+const BUTTON_TEXT = {
+  LOGIN: "Đăng nhập",
+  SEARCH: "Tìm kiếm",
+  CREATE: "Thêm mới",
+  UPDATE: "Cập nhật",
+  DELETE: "Xóa",
+  CANCEL: "Hủy",
+};
 
 export {
   VALID_PATTERN,
@@ -87,4 +113,8 @@ export {
   STATUS_MAP,
   ITEMS_PER_PAGE,
   GROUP_KIND_MAP,
+  FILE_TYPES,
+  BASIC_MESSAGES,
+  BUTTON_TEXT,
+  FETCH_INTERVAL,
 };

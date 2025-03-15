@@ -3,6 +3,8 @@ import { authController } from "../controllers/authController.ts";
 import mediaController from "../controllers/mediaController.ts";
 import { adminController } from "../controllers/adminController.ts";
 import { roleController } from "../controllers/roleController.ts";
+import { accountBranchController } from "../controllers/accountBranchController.ts";
+import { branchController } from "../controllers/branchController.ts";
 
 const useApi = () => {
   const { fetchApi, loading } = useFetch();
@@ -11,6 +13,8 @@ const useApi = () => {
   const media = mediaController(fetchApi);
   const admin = adminController(fetchApi);
   const role = roleController(fetchApi);
+  const accountBranch = accountBranchController(fetchApi);
+  const branch = branchController(fetchApi);
 
   return {
     auth,
@@ -18,6 +22,8 @@ const useApi = () => {
     loading,
     admin,
     role,
+    accountBranch,
+    branch,
   };
 };
 

@@ -1,13 +1,26 @@
-const InputBox = ({ value, placeholder, onChangeText, icon: Icon }: any) => {
+import { XIcon } from "lucide-react";
+
+const InputBox = ({ value, placeholder, onChangeText }: any) => {
+  const handleClear = () => {
+    onChangeText("");
+  };
+
   return (
-    <div className="w-full md:w-[20rem] flex items-center p-3 rounded-md bg-gray-600">
+    <div className="w-full md:w-[15rem] flex items-center p-2 rounded-md bg-gray-600">
       <input
         className="flex-1 text-base outline-none text-gray-100 placeholder-gray-300 bg-gray-600"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChangeText(e.target.value)}
       />
-      {Icon && <Icon size={16} className={"text-gray-100"} />}
+      {value && (
+        <button
+          onClick={handleClear}
+          className="p-1 text-gray-300 hover:text-gray-100 rounded-full hover:bg-gray-700 transition-colors duration-200"
+        >
+          <XIcon size={16} />
+        </button>
+      )}
     </div>
   );
 };
