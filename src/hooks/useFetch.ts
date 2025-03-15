@@ -74,8 +74,8 @@ const useFetch = () => {
   }, []);
 
   const fetchApi = (options: FetchOptions) => {
-    if (options.method === METHOD.GET && options.payload) {
-      const filteredPayload = Object.fromEntries(
+    if (options.payload && !(options.payload instanceof FormData)) {
+      options.payload = Object.fromEntries(
         Object.entries(options.payload).filter(
           ([_, value]) =>
             value !== null &&
@@ -83,8 +83,10 @@ const useFetch = () => {
             !(typeof value === "string" && value.trim() === "")
         )
       );
+    }
+    if (options.method === METHOD.GET && options.payload) {
       const queryString = new URLSearchParams(
-        filteredPayload as any
+        options.payload as any
       ).toString();
       if (queryString) {
         options.endpoint += `?${queryString}`;

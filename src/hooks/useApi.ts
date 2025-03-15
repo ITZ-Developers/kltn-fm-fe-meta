@@ -6,6 +6,8 @@ import { roleController } from "../controllers/roleController.ts";
 import { accountBranchController } from "../controllers/accountBranchController.ts";
 import { branchController } from "../controllers/branchController.ts";
 import { serverProviderController } from "../controllers/serverProviderController.ts";
+import { customerController } from "../controllers/customerController.ts";
+import { locationController } from "../controllers/locationController.ts";
 
 const useApi = () => {
   const { fetchApi, loading } = useFetch();
@@ -17,6 +19,8 @@ const useApi = () => {
   const accountBranch = accountBranchController(fetchApi);
   const branch = branchController(fetchApi);
   const serverProvider = serverProviderController(fetchApi);
+  const customer = customerController(fetchApi);
+  const location = locationController(fetchApi);
 
   return {
     auth,
@@ -27,6 +31,8 @@ const useApi = () => {
     accountBranch,
     branch,
     serverProvider,
+    customer,
+    location,
   };
 };
 

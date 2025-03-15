@@ -19,7 +19,6 @@ import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import { GridView } from "../../components/page/GridView";
 import MyToastContainer from "../../components/page/MyToastContainer";
-import { renderNestField } from "../../components/ItemRender";
 import { useParams } from "react-router-dom";
 import useQueryState from "../../hooks/useQueryState";
 import { SelectBox } from "../../components/page/SelectBox";
@@ -84,11 +83,11 @@ const AccountBranch = () => {
   }, [adminId]);
 
   const columns = [
-    renderNestField({
+    {
       label: "Tên chi nhánh",
       accessor: "branch.name",
       align: ALIGNMENT.LEFT,
-    }),
+    },
     {
       label: "Hành động",
       accessor: "action",
@@ -139,7 +138,7 @@ const AccountBranch = () => {
     <Sidebar
       breadcrumbs={[
         {
-          label: `${PAGE_CONFIG.ADMIN.label} (${account?.fullName})`,
+          label: `${account?.fullName}`,
           onClick: handleNavigateBack,
         },
         {

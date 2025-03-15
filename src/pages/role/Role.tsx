@@ -14,8 +14,9 @@ import { useGridView } from "../../hooks/useGridView";
 import { ActionEditButton } from "../../components/form/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { convertUtcToVn } from "../../services/utils";
+import { StaticSelectBox } from "../../components/page/SelectBox";
 
-const initQuery = { name: "", page: 0, size: ITEMS_PER_PAGE };
+const initQuery = { name: "", kind: "", page: 0, size: ITEMS_PER_PAGE };
 
 const Role = () => {
   const { state } = useLocation();
@@ -86,13 +87,23 @@ const Role = () => {
         <>
           <ToolBar
             searchBoxes={
-              <InputBox
-                value={query.name}
-                onChangeText={(value: any) =>
-                  setQuery({ ...query, name: value })
-                }
-                placeholder="Tên vai trò..."
-              />
+              <>
+                <InputBox
+                  value={query.name}
+                  onChangeText={(value: any) =>
+                    setQuery({ ...query, name: value })
+                  }
+                  placeholder="Tên vai trò..."
+                />
+                <StaticSelectBox
+                  value={query.kind}
+                  onChange={(value: any) => {
+                    setQuery({ ...query, kind: value });
+                  }}
+                  dataMap={GROUP_KIND_MAP}
+                  placeholder="Loại..."
+                />
+              </>
             }
             onSearch={async () => await handleSubmitQuery(query)}
             onClear={async () => await handleSubmitQuery(initQuery)}

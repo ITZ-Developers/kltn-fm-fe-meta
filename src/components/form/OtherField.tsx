@@ -1,6 +1,10 @@
-import { UploadIcon } from "lucide-react";
+import { UploadIcon, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { getMediaImage } from "../../services/utils";
+import {
+  formatToDDMMYYYY,
+  getMediaImage,
+  parseToYYYYMMDD,
+} from "../../services/utils";
 import useApi from "../../hooks/useApi";
 import { FILE_TYPES } from "../../services/constant";
 
@@ -11,14 +15,24 @@ const DatePickerField = ({
   onChange,
   placeholder = "Chọn ngày...",
   error = "",
-}: {
-  title?: string;
-  isRequired?: boolean;
-  value?: string; // Format: YYYY-MM-DD
-  onChange: (date: string) => void;
-  placeholder?: string;
-  error?: string;
-}) => {
+}: any) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleInputClick = () => {
+    if (inputRef.current) {
+      inputRef.current.showPicker();
+    }
+  };
+
+  const inputValue = value ? parseToYYYYMMDD(value) : "";
+
+  const handleDateChange = (e: any) => {
+    const selectedDate = e.target.value;
+    const formattedDate = formatToDDMMYYYY(selectedDate);
+    onChange(formattedDate);
+  };
+
   return (
     <div className="flex-1 items-center">
       {title && (
@@ -28,21 +42,36 @@ const DatePickerField = ({
         </label>
       )}
       <div
-        className={`flex items-center border rounded-md p-2 flex-1 ${
-          error ? "border-red-500 bg-red-900/20" : "border-gray-600 bg-gray-800"
+        className={`flex items-center border rounded-md p-2 flex-1 relative transition-all duration-200 ${
+          error
+            ? "border-red-500 bg-red-900/20"
+            : isFocused
+            ? "border-blue-500 bg-gray-800 ring-2 ring-blue-500/20"
+            : "border-gray-600 bg-gray-800 hover:border-gray-500"
         }`}
       >
         <input
+          ref={inputRef}
           type="date"
-          className={`flex-1 text-base outline-none bg-transparent ${
+          className={`flex-1 text-base outline-none bg-transparent appearance-none cursor-pointer ${
             error
               ? "text-red-400 placeholder-red-400/50"
-              : "text-gray-200 placeholder-gray-500"
+              : inputValue
+              ? "text-gray-200"
+              : "text-transparent"
           }`}
+          value={inputValue}
+          onChange={handleDateChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          onClick={handleInputClick}
           placeholder={placeholder}
-          value={value || ""}
-          onChange={(e) => onChange(e.target.value)}
         />
+        {!inputValue && !isFocused && (
+          <span className="absolute left-2 pointer-events-none text-gray-500">
+            {placeholder}
+          </span>
+        )}
       </div>
       {error && <p className="text-red-400 text-sm mt-1 text-left">{error}</p>}
     </div>

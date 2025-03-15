@@ -11,41 +11,35 @@ import { PAGE_CONFIG } from "../../components/PageConfig";
 import useApi from "../../hooks/useApi";
 import { useGridView } from "../../hooks/useGridView";
 import useModal from "../../hooks/useModal";
-import {
-  ALIGNMENT,
-  GROUP_KIND_MAP,
-  ITEMS_PER_PAGE,
-  STATUS_MAP,
-} from "../../services/constant";
+import { ALIGNMENT, ITEMS_PER_PAGE } from "../../services/constant";
 import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import { GridView } from "../../components/page/GridView";
 import MyToastContainer from "../../components/page/MyToastContainer";
-import { useLocation, useNavigate } from "react-router-dom";
-import { SelectBox, StaticSelectBox } from "../../components/page/SelectBox";
-import {
-  renderEnum,
-  renderHrefLink,
-  renderImage,
-} from "../../components/ItemRender";
+import { useNavigate, useParams } from "react-router-dom";
+import useQueryState from "../../hooks/useQueryState";
+import { useEffect, useState } from "react";
+import InputBox from "../../components/page/InputBox";
 
-const initQuery = {
-  accountId: "",
-  status: "",
-  page: 0,
-  size: ITEMS_PER_PAGE,
-};
-
-const Customer = () => {
-  const { state } = useLocation();
+const Location = () => {
   const navigate = useNavigate();
+  const { customerId } = useParams();
+  const initQuery = {
+    customerId,
+    name: "",
+    page: 0,
+    size: ITEMS_PER_PAGE,
+  };
+  const { handleNavigateBack } = useQueryState({
+    path: PAGE_CONFIG.CUSTOMER.path,
+  });
   const {
     isModalVisible: deleteDialogVisible,
     showModal: showDeleteDialog,
     hideModal: hideDeleteDialog,
     formConfig: deleteDialogConfig,
   } = useModal();
-  const { customer, admin } = useApi();
+  const { location, customer } = useApi();
   const {
     data,
     query,
@@ -54,31 +48,36 @@ const Customer = () => {
     handlePageChange,
     handleSubmitQuery,
   } = useGridView({
-    fetchListApi: customer.list,
-    initQuery: state?.query || initQuery,
+    fetchListApi: location.list,
+    initQuery,
   });
+  const [customerData, setCustomerData] = useState<any>(null);
+
+  useEffect(() => {
+    if (!customerId) {
+      handleNavigateBack();
+      return;
+    }
+
+    const fetchData = async () => {
+      const res = await customer.get(customerId);
+      if (res.result) {
+        const data = res.data;
+        setCustomerData(data);
+      } else {
+        handleNavigateBack();
+      }
+    };
+
+    fetchData();
+  }, [customerId]);
 
   const columns = [
-    renderImage({
-      label: "Ảnh",
-      accessor: "account.avatarPath",
-    }),
-    renderHrefLink({
-      label: "Họ và tên",
-      accessor: "account.fullName",
-      align: ALIGNMENT.LEFT,
-      role: PAGE_CONFIG.LOCATION.role,
-      onClick: (item: any) => {
-        navigate(`/customer/location/${item.id}`, { state: { query } });
-      },
-    }),
-    { label: "Tài khoản", accessor: "account.username", align: ALIGNMENT.LEFT },
     {
-      label: "Email",
-      accessor: "account.email",
+      label: "Tên khu vực",
+      accessor: "name",
       align: ALIGNMENT.LEFT,
     },
-    renderEnum({}),
     {
       label: "Hành động",
       accessor: "action",
@@ -87,11 +86,11 @@ const Customer = () => {
         return (
           <span className="flex items-center text-center justify-center space-x-2">
             <ActionEditButton
-              role={PAGE_CONFIG.UPDATE_CUSTOMER.role}
+              role={PAGE_CONFIG.UPDATE_LOCATION.role}
               onClick={() => onUpdateButtonClick(item.id)}
             />
             <ActionDeleteButton
-              role={PAGE_CONFIG.DELETE_CUSTOMER.role}
+              role={PAGE_CONFIG.DELETE_LOCATION.role}
               onClick={() => onDeleteButtonClick(item.id)}
             />
           </span>
@@ -100,11 +99,19 @@ const Customer = () => {
     },
   ];
 
+  const onCreateButtonClick = () => {
+    navigate(`/customer/location/create/${customerId}`, { state: { query } });
+  };
+
+  const onUpdateButtonClick = (id: any) => {
+    navigate(`/customer/location/update/${id}`, { state: { query } });
+  };
+
   const onDeleteButtonClick = (id: any) => {
     showDeleteDialog(
       configDeleteDialog({
-        label: PAGE_CONFIG.DELETE_CUSTOMER.label,
-        deleteApi: () => customer.del(id),
+        label: PAGE_CONFIG.DELETE_LOCATION.label,
+        deleteApi: () => location.del(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideDeleteDialog,
         toast,
@@ -112,19 +119,15 @@ const Customer = () => {
     );
   };
 
-  const onCreateButtonClick = () => {
-    navigate(PAGE_CONFIG.CREATE_CUSTOMER.path, { state: { query } });
-  };
-
-  const onUpdateButtonClick = (id: any) => {
-    navigate(`/customer/update/${id}`, { state: { query } });
-  };
-
   return (
     <Sidebar
       breadcrumbs={[
         {
-          label: PAGE_CONFIG.CUSTOMER.label,
+          label: `${customerData?.account?.fullName}`,
+          onClick: handleNavigateBack,
+        },
+        {
+          label: PAGE_CONFIG.LOCATION.label,
         },
       ]}
       activeItem={PAGE_CONFIG.CUSTOMER.name}
@@ -134,25 +137,12 @@ const Customer = () => {
           <ToolBar
             searchBoxes={
               <>
-                <SelectBox
-                  value={query.accountId}
-                  onChange={(value: any) => {
-                    setQuery({ ...query, accountId: value });
-                  }}
-                  queryParams={{
-                    kind: GROUP_KIND_MAP.CUSTOMER.value,
-                  }}
-                  fetchListApi={admin.autoComplete}
-                  placeholder="Họ và tên..."
-                  labelKey="fullName"
-                />
-                <StaticSelectBox
-                  value={query.status}
-                  onChange={(value: any) => {
-                    setQuery({ ...query, status: value });
-                  }}
-                  dataMap={STATUS_MAP}
-                  placeholder="Trạng thái..."
+                <InputBox
+                  value={query.name}
+                  onChangeText={(value: any) =>
+                    setQuery({ ...query, name: value })
+                  }
+                  placeholder="Tên khu vực..."
                 />
               </>
             }
@@ -160,7 +150,7 @@ const Customer = () => {
             onClear={async () => await handleSubmitQuery(initQuery)}
             actionButtons={
               <CreateButton
-                role={PAGE_CONFIG.CREATE_CUSTOMER.role}
+                role={PAGE_CONFIG.CREATE_ACCOUNT_BRANCH.role}
                 onClick={onCreateButtonClick}
               />
             }
@@ -182,5 +172,4 @@ const Customer = () => {
     ></Sidebar>
   );
 };
-
-export default Customer;
+export default Location;

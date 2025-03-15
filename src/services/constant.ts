@@ -76,6 +76,11 @@ const GROUP_KIND_MAP = {
     label: "Khách hàng",
     className: "bg-yellow-900 text-yellow-300",
   },
+  EMPLOYEE: {
+    value: 3,
+    label: "Nhân viên",
+    className: "bg-red-900 text-red-300",
+  },
 };
 
 const ITEMS_PER_PAGE = 10;

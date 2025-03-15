@@ -5,7 +5,6 @@ import {
   renderEnum,
   renderHrefLink,
   renderImage,
-  renderNestField,
 } from "../../components/ItemRender";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
@@ -75,11 +74,11 @@ const Admin = () => {
       accessor: "email",
       align: ALIGNMENT.LEFT,
     },
-    renderNestField({
+    {
       label: "Vai trò",
       accessor: "group.name",
       align: ALIGNMENT.LEFT,
-    }),
+    },
     renderEnum({}),
     {
       label: "Hành động",

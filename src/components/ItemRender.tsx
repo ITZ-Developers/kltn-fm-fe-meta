@@ -18,9 +18,9 @@ const renderImage = ({
       <div
         className={`${className} flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-700`}
       >
-        {item?.[`${accessor}`] ? (
+        {getNestedValue(item, accessor) ? (
           <img
-            src={getMediaImage(item[`${accessor}`])}
+            src={getMediaImage(getNestedValue(item, accessor))}
             className="object-cover"
           />
         ) : (
@@ -42,7 +42,7 @@ const renderEnum = ({
     accessor,
     align,
     render: (item: any) => {
-      const value: any = getEnumItem(dataMap, item[`${accessor}`]);
+      const value: any = getEnumItem(dataMap, getNestedValue(item, accessor));
       return (
         <div className={`text-${align}`}>
           <span
@@ -51,25 +51,6 @@ const renderEnum = ({
             {value.label}
           </span>
         </div>
-      );
-    },
-  };
-};
-
-const renderNestField = ({
-  label = "Default",
-  accessor = "group.name",
-  align = ALIGNMENT.LEFT,
-}) => {
-  return {
-    label,
-    accessor,
-    align,
-    render: (item: any) => {
-      return (
-        <span className={`p-4 text-${align} whitespace-nowrap`}>
-          {getNestedValue(item, accessor)}
-        </span>
       );
     },
   };
@@ -92,7 +73,7 @@ const renderHrefLink = ({
       if (!onClick || (role && !hasRole(role))) {
         return (
           <span className={`text-gray-300 p-4 text-${align} whitespace-nowrap`}>
-            {item[accessor]}
+            {getNestedValue(item, accessor)}
           </span>
         );
       }
@@ -101,11 +82,11 @@ const renderHrefLink = ({
           className={`text-blue-600 hover:underline p-4 text-${align} whitespace-nowrap hover:cursor-pointer`}
           onClick={() => onClick(item)}
         >
-          {item[accessor]}
+          {getNestedValue(item, accessor)}
         </a>
       );
     },
   };
 };
 
-export { renderImage, renderEnum, renderNestField, renderHrefLink };
+export { renderImage, renderEnum, renderHrefLink };

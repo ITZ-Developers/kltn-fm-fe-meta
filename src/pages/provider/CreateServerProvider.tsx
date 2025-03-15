@@ -136,7 +136,6 @@ const CreateServerProvider = () => {
                     onChangeText={(value: any) =>
                       handleChange("mySqlRootUser", value)
                     }
-                    type="mySqlRootUser"
                     error={errors.mySqlRootUser}
                   />
                   <InputField

@@ -12,6 +12,11 @@ import Branch from "../pages/branch/Branch";
 import ServerProvider from "../pages/provider/ServerProvider";
 import CreateServerProvider from "../pages/provider/CreateServerProvider";
 import UpdateServerProvider from "../pages/provider/UpdateServerProvider";
+import UpdateCustomer from "../pages/customer/UpdateCustomer";
+import CreateCustomer from "../pages/customer/CreateCustomer";
+import Location from "../pages/location/Location";
+import CreateLocation from "../pages/location/CreateLocation";
+import UpdateLocation from "../pages/location/UpdateLocation";
 
 const ADMIN_CONFIG = {
   ADMIN: {
@@ -97,6 +102,47 @@ const CUSTOMER_CONFIG = {
     role: "CU_L",
     element: <Customer />,
   },
+  CREATE_CUSTOMER: {
+    label: "Thêm mới khách hàng",
+    path: "/customer/create",
+    role: "CU_C",
+    element: <CreateCustomer />,
+  },
+  UPDATE_CUSTOMER: {
+    label: "Cập nhật thông tin khách hàng",
+    path: "/customer/update/:id",
+    role: "CU_U",
+    element: <UpdateCustomer />,
+  },
+  DELETE_CUSTOMER: {
+    label: "Xóa khách hàng",
+    role: "CU_D",
+  },
+};
+
+const LOCATION_CONFIG = {
+  LOCATION: {
+    label: "Khu vực",
+    path: "/customer/location/:customerId",
+    role: "LO_L",
+    element: <Location />,
+  },
+  CREATE_LOCATION: {
+    label: "Thêm mới khu vực",
+    path: "/customer/location/create/:customerId",
+    role: "LO_C",
+    element: <CreateLocation />,
+  },
+  UPDATE_LOCATION: {
+    label: "Cập nhật khu vực",
+    path: "/customer/location/update/:id",
+    role: "LO_U",
+    element: <UpdateLocation />,
+  },
+  DELETE_LOCATION: {
+    label: "Xóa khu vực",
+    role: "LO_D",
+  },
 };
 
 const BRANCH_CONFIG = {
@@ -155,6 +201,7 @@ const PAGE_CONFIG = {
   ...CUSTOMER_CONFIG,
   ...BRANCH_CONFIG,
   ...SERVER_PROVIDER_CONFIG,
+  ...LOCATION_CONFIG,
 };
 
 const SIDEBAR_MENUS = [

@@ -1,3 +1,4 @@
+import { getNestedValue } from "../../services/utils";
 import { useGlobalContext } from "../GlobalProvider";
 import NoData from "./NoData";
 import Pagination from "./Pagination";
@@ -75,7 +76,7 @@ const GridView = ({
                             <span
                               className={`p-4 text-${col.align} whitespace-nowrap`}
                             >
-                              {item[col.accessor]}
+                              {getNestedValue(item, col.accessor)}
                             </span>
                           )}
                         </td>

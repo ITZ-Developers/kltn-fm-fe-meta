@@ -1,10 +1,10 @@
 import { API_URL, AUTH_TYPE, METHOD } from "../services/constant.ts";
 
-export const adminController = (fetchApi: any) => {
+export const customerController = (fetchApi: any) => {
   const list = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: "/v1/account/list",
+      endpoint: "/v1/customer/list",
       method: METHOD.GET,
       payload,
       authType: AUTH_TYPE.BEARER,
@@ -13,7 +13,7 @@ export const adminController = (fetchApi: any) => {
   const autoComplete = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: "/v1/account/auto-complete",
+      endpoint: "/v1/customer/auto-complete",
       method: METHOD.GET,
       payload,
       authType: AUTH_TYPE.BEARER,
@@ -22,7 +22,7 @@ export const adminController = (fetchApi: any) => {
   const get = (id: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: `/v1/account/get/${id}`,
+      endpoint: `/v1/customer/get/${id}`,
       method: METHOD.GET,
       authType: AUTH_TYPE.BEARER,
     });
@@ -30,7 +30,7 @@ export const adminController = (fetchApi: any) => {
   const create = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: `/v1/account/create-admin`,
+      endpoint: `/v1/customer/create`,
       method: METHOD.POST,
       payload,
       authType: AUTH_TYPE.BEARER,
@@ -39,7 +39,7 @@ export const adminController = (fetchApi: any) => {
   const update = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: `/v1/account/update-admin`,
+      endpoint: `/v1/customer/update`,
       method: METHOD.PUT,
       payload,
       authType: AUTH_TYPE.BEARER,
@@ -48,7 +48,7 @@ export const adminController = (fetchApi: any) => {
   const del = (id: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
-      endpoint: `/v1/account/delete/${id}`,
+      endpoint: `/v1/customer/delete/${id}`,
       method: METHOD.DELETE,
       authType: AUTH_TYPE.BEARER,
     });
