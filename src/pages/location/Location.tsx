@@ -126,10 +126,9 @@ const Location = () => {
     handleSubmitQuery,
   } = useGridView({
     fetchListApi: location.list,
-    initQuery: state ? { customerId, ...state.query } : initQuery,
+    initQuery,
   });
   const [customerData, setCustomerData] = useState<any>(null);
-
   useEffect(() => {
     if (!customerId) {
       handleNavigateBack();
@@ -141,6 +140,11 @@ const Location = () => {
       if (res.result) {
         const data = res.data;
         setCustomerData(data);
+        setQuery((prev: any) => ({
+          ...prev,
+          customerId: data.id,
+        }));
+        await handleSubmitQuery(query);
       } else {
         handleNavigateBack();
       }

@@ -64,7 +64,7 @@ const CreateCustomer = () => {
       phone: "",
       password: "",
       avatarPath: "",
-      status: "",
+      status: 1,
       confirmPassword: "",
       branchId: "",
     },

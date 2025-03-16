@@ -71,7 +71,7 @@ const UpdateAdmin = () => {
         password: "",
         avatarPath: "",
         groupId: "",
-        status: "",
+        status: 1,
         confirmPassword: "",
       },
       validate

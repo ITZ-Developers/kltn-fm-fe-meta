@@ -62,7 +62,7 @@ const UpdateCustomer = () => {
         phone: "",
         password: "",
         avatarPath: "",
-        status: "",
+        status: 1,
         confirmPassword: "",
         branchName: "",
       },

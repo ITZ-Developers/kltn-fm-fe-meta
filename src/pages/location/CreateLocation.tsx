@@ -81,7 +81,7 @@ const CreateLocation = () => {
       name: "",
       tenantId: "",
       hotline: "",
-      status: "",
+      status: 1,
       startDate: "",
       expiredDate: "",
     },

@@ -66,7 +66,7 @@ const CreateAdmin = () => {
       password: "",
       avatarPath: "",
       groupId: "",
-      status: "",
+      status: 1,
       confirmPassword: "",
     },
     validate
