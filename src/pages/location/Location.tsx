@@ -291,7 +291,7 @@ const Location = () => {
             onClear={async () => await handleSubmitQuery(initQuery)}
             actionButtons={
               <CreateButton
-                role={PAGE_CONFIG.CREATE_ACCOUNT_BRANCH.role}
+                role={PAGE_CONFIG.CREATE_LOCATION.role}
                 onClick={onCreateButtonClick}
               />
             }
