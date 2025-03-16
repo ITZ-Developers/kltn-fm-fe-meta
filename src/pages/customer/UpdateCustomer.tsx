@@ -3,7 +3,6 @@ import useApi from "../../hooks/useApi";
 import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
-  GROUP_KIND_MAP,
   STATUS_MAP,
   VALID_PATTERN,
 } from "../../services/constant";
@@ -14,14 +13,11 @@ import Sidebar from "../../components/page/Sidebar";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
 import { ImageUploadField } from "../../components/form/OtherField";
 import { InputField } from "../../components/form/InputField";
-import {
-  SelectField,
-  StaticSelectField,
-} from "../../components/form/SelectField";
+import { StaticSelectField } from "../../components/form/SelectField";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useQueryState from "../../hooks/useQueryState";
 
 const UpdateCustomer = () => {
@@ -55,6 +51,7 @@ const UpdateCustomer = () => {
     }
     return newErrors;
   };
+  const [customerData, setCustomerData] = useState<any>({});
 
   const { form, errors, setForm, resetForm, handleChange, isValidForm } =
     useForm(
@@ -67,6 +64,7 @@ const UpdateCustomer = () => {
         avatarPath: "",
         status: "",
         confirmPassword: "",
+        branchName: "",
       },
       validate
     );
@@ -83,6 +81,7 @@ const UpdateCustomer = () => {
         const res = await customer.get(id);
         if (res.result) {
           const data = res.data;
+          setCustomerData(data);
           setForm({
             fullName: data.account.fullName,
             username: data.account.username,
@@ -90,6 +89,7 @@ const UpdateCustomer = () => {
             phone: data.account.phone,
             avatarPath: data.account.avatarPath,
             status: data.status,
+            branchName: data.branch?.name,
           });
         } else {
           handleNavigateBack();
@@ -119,7 +119,7 @@ const UpdateCustomer = () => {
     <Sidebar
       breadcrumbs={[
         {
-          label: PAGE_CONFIG.CUSTOMER.label,
+          label: `${customerData?.account?.fullName}`,
           onClick: handleNavigateBack,
         },
         {
@@ -202,6 +202,12 @@ const UpdateCustomer = () => {
                   />
                 </div>
                 <div className="flex flex-row space-x-2">
+                  <InputField
+                    title="Chi nhánh"
+                    disabled={true}
+                    isRequired={true}
+                    value={form.branchName}
+                  />
                   <StaticSelectField
                     title="Trạng thái"
                     isRequired={true}
@@ -211,7 +217,6 @@ const UpdateCustomer = () => {
                     onChange={(value: any) => handleChange("status", value)}
                     error={errors.status}
                   />
-                  <span className="flex-1" />
                 </div>
                 <ActionSection
                   children={

@@ -14,6 +14,7 @@ import {
   ALIGNMENT,
   BASIC_MESSAGES,
   ITEMS_PER_PAGE,
+  TRUNCATE_LENGTH,
 } from "../../services/constant";
 import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
@@ -24,6 +25,8 @@ import useQueryState from "../../hooks/useQueryState";
 import { SelectBox } from "../../components/page/SelectBox";
 import CreateAccountBranch from "./CreateAccountBranch";
 import { useEffect, useState } from "react";
+import { basicRender } from "../../components/ItemRender";
+import { truncateString } from "../../services/utils";
 
 const AccountBranch = () => {
   const { adminId } = useParams();
@@ -87,6 +90,16 @@ const AccountBranch = () => {
       label: "Tên chi nhánh",
       accessor: "branch.name",
       align: ALIGNMENT.LEFT,
+    },
+    {
+      label: "Mô tả",
+      align: ALIGNMENT.LEFT,
+      render: (item: any) => {
+        return basicRender({
+          align: ALIGNMENT.LEFT,
+          content: truncateString(item?.branch?.description, TRUNCATE_LENGTH),
+        });
+      },
     },
     {
       label: "Hành động",

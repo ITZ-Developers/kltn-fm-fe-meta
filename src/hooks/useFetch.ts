@@ -1,5 +1,11 @@
 import { useState, useCallback } from "react";
-import { AUTH_TYPE, ENV, LOCAL_STORAGE, METHOD } from "../services/constant";
+import {
+  AUTH_TYPE,
+  BASIC_MESSAGES,
+  ENV,
+  LOCAL_STORAGE,
+  METHOD,
+} from "../services/constant";
 import { getStorageData } from "../services/storages";
 
 interface FetchOptions {
@@ -61,13 +67,9 @@ const useFetch = () => {
         ? await response.json()
         : await response.text();
 
-      if (!response.ok) {
-        return response;
-      }
-
       return data;
-    } catch (err) {
-      return err;
+    } catch (err: any) {
+      return { message: err.message || BASIC_MESSAGES.FAILED };
     } finally {
       setLoading(false);
     }

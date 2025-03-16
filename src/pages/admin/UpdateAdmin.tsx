@@ -21,7 +21,7 @@ import {
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useQueryState from "../../hooks/useQueryState";
 
 const UpdateAdmin = () => {
@@ -59,6 +59,7 @@ const UpdateAdmin = () => {
     }
     return newErrors;
   };
+  const [adminData, setAdminData] = useState<any>({});
 
   const { form, errors, setForm, resetForm, handleChange, isValidForm } =
     useForm(
@@ -87,6 +88,7 @@ const UpdateAdmin = () => {
       const res = await admin.get(id);
       if (res.result) {
         const data = res.data;
+        setAdminData(data);
         setForm({
           fullName: data.fullName,
           username: data.username,
@@ -121,7 +123,7 @@ const UpdateAdmin = () => {
     <Sidebar
       breadcrumbs={[
         {
-          label: PAGE_CONFIG.ADMIN.label,
+          label: `${adminData?.fullName}`,
           onClick: handleNavigateBack,
         },
         {
@@ -131,6 +133,7 @@ const UpdateAdmin = () => {
       activeItem={PAGE_CONFIG.ADMIN.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <FormCard
             title={PAGE_CONFIG.UPDATE_ADMIN.label}
             children={
@@ -238,7 +241,6 @@ const UpdateAdmin = () => {
                   }
                 />
                 <MyToastContainer />
-                <LoadingDialog isVisible={loading} />
               </div>
             }
           />

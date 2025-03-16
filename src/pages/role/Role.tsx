@@ -1,7 +1,7 @@
 import { GridView } from "../../components/page/GridView";
 import Sidebar from "../../components/page/Sidebar";
 import useApi from "../../hooks/useApi";
-import { renderEnum } from "../../components/ItemRender";
+import { basicRender, renderEnum } from "../../components/ItemRender";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import { ToolBar } from "../../components/page/ToolBar";
 import InputBox from "../../components/page/InputBox";
@@ -9,11 +9,12 @@ import {
   ALIGNMENT,
   GROUP_KIND_MAP,
   ITEMS_PER_PAGE,
+  TRUNCATE_LENGTH,
 } from "../../services/constant";
 import { useGridView } from "../../hooks/useGridView";
 import { ActionEditButton } from "../../components/form/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { convertUtcToVn } from "../../services/utils";
+import { convertUtcToVn, truncateString } from "../../services/utils";
 import { StaticSelectBox } from "../../components/page/SelectBox";
 
 const initQuery = { name: "", kind: "", page: 0, size: ITEMS_PER_PAGE };
@@ -36,6 +37,17 @@ const Role = () => {
 
   const columns = [
     { label: "Tên vai trò", accessor: "name", align: ALIGNMENT.LEFT },
+    {
+      label: "Mô tả",
+      accessor: "description",
+      align: ALIGNMENT.LEFT,
+      render: (item: any) => {
+        return basicRender({
+          align: ALIGNMENT.LEFT,
+          content: truncateString(item.description, TRUNCATE_LENGTH),
+        });
+      },
+    },
     {
       label: "Lần cập nhật cuối",
       accessor: "modifiedDate",

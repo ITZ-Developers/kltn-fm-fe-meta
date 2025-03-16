@@ -64,10 +64,14 @@ const generateUniqueId = () => {
 };
 
 const truncateString = (str: any, limit: any) => {
-  if (str.length > limit) {
-    return str.slice(0, limit) + "...";
+  try {
+    if (str.length > limit) {
+      return str.slice(0, limit) + "...";
+    }
+    return str;
+  } catch (ignored) {
+    return str;
   }
-  return str;
 };
 
 const isValidURL = (url: string) => {
@@ -97,18 +101,130 @@ const getNestedValue = (obj: any, path: string, defaultValue = "") => {
   return path.split(".").reduce((acc, key) => acc?.[key], obj) ?? defaultValue;
 };
 
-// yyyy-mm-dd to dd/mm/yyyy
-const formatToDDMMYYYY = (dateString: string) => {
+// yyyy-mm-dd to dd/mm/yyyy hh:mm:ss
+// Chuyển từ yyyy-mm-dd [hh:mm:ss] sang dd/mm/yyyy hh:mm:ss
+const formatToDDMMYYYY = (dateString: string): string => {
   if (!dateString) return "";
-  const [year, month, day] = dateString.split("-");
-  return `${day}/${month}/${year}`;
+
+  try {
+    const [datePart, timePart] = dateString.split(" ");
+    const [year, month, day] = datePart.split("-").map(Number);
+
+    if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1000) {
+      return "";
+    }
+
+    const formattedDate = `${day.toString().padStart(2, "0")}/${month
+      .toString()
+      .padStart(2, "0")}/${year}`;
+
+    if (timePart) {
+      const [hours, minutes, seconds] = timePart.split(":").map(Number);
+      if (
+        hours >= 0 &&
+        hours <= 23 &&
+        minutes >= 0 &&
+        minutes <= 59 &&
+        seconds >= 0 &&
+        seconds <= 59
+      ) {
+        return `${formattedDate} ${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      }
+      return "";
+    }
+
+    return `${formattedDate} 00:00:00`;
+  } catch (error) {
+    return "";
+  }
 };
 
-// dd/mm/yyyy to yyyy-mm-dd
-const parseToYYYYMMDD = (dateString: string) => {
+// dd/mm/yyyy hh:mm:ss to yyyy-mm-dd
+const parseToYYYYMMDD = (dateString: string): string => {
   if (!dateString) return "";
-  const [day, month, year] = dateString.split("/");
-  return `${year}-${month}-${day}`;
+  try {
+    const [datePart, timePart] = dateString.split(" ");
+    const [day, month, year] = datePart.split("/").map(Number);
+
+    if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1000) {
+      return "";
+    }
+
+    const formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day
+      .toString()
+      .padStart(2, "0")}`;
+
+    if (timePart) {
+      const [hours, minutes, seconds] = timePart.split(":").map(Number);
+      if (
+        hours >= 0 &&
+        hours <= 23 &&
+        minutes >= 0 &&
+        minutes <= 59 &&
+        seconds >= 0 &&
+        seconds <= 59
+      ) {
+        return `${formattedDate} ${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      }
+    }
+    return formattedDate;
+  } catch (error) {
+    return "";
+  }
+};
+
+// Function to parse dd/mm/yyyy hh:mm:ss format to Date object
+const parseDate = (dateStr: string): Date | null => {
+  try {
+    const [datePart, timePart] = dateStr.split(" ");
+    const [day, month, year] = datePart.split("/").map(Number);
+    const [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+    // Validate ranges
+    if (
+      day < 1 ||
+      day > 31 ||
+      month < 1 ||
+      month > 12 ||
+      hours < 0 ||
+      hours > 23 ||
+      minutes < 0 ||
+      minutes > 59 ||
+      seconds < 0 ||
+      seconds > 59
+    ) {
+      return null;
+    }
+
+    return new Date(year, month - 1, day, hours, minutes, seconds);
+  } catch (ignored) {
+    return null;
+  }
+};
+
+const truncateToDDMMYYYY = (dateString: string): string => {
+  if (!dateString) return "";
+  try {
+    const [datePart] = dateString.split(" ");
+    const [day, month, year] = datePart.split("/").map(Number);
+    if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1000) {
+      return "";
+    }
+    return `${day.toString().padStart(2, "0")}/${month
+      .toString()
+      .padStart(2, "0")}/${year}`;
+  } catch (error) {
+    return "";
+  }
+};
+
+const extractDatabaseName = (jdbcUrl: string) => {
+  const match = jdbcUrl.match(/jdbc:mysql:\/\/[^\/]+\/([^?]+)/);
+  return match ? match[1] : null;
 };
 
 export {
@@ -126,4 +242,7 @@ export {
   convertUtcToVn,
   formatToDDMMYYYY,
   parseToYYYYMMDD,
+  parseDate,
+  truncateToDDMMYYYY,
+  extractDatabaseName,
 };

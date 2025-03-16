@@ -15,7 +15,7 @@ import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
 import useQueryState from "../../hooks/useQueryState";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const UpdateServerProvider = () => {
   const { id } = useParams();
@@ -36,6 +36,7 @@ const UpdateServerProvider = () => {
     }
     return newErrors;
   };
+  const [serverProviderData, setServerProviderData] = useState<any>({});
 
   const { form, errors, setForm, resetForm, handleChange, isValidForm } =
     useForm(
@@ -62,6 +63,7 @@ const UpdateServerProvider = () => {
       const res = await serverProvider.get(id);
       if (res.result) {
         const data = res.data;
+        setServerProviderData(data);
         setForm({
           host: data.host,
           maxTenant: data.maxTenant,
@@ -96,7 +98,7 @@ const UpdateServerProvider = () => {
     <Sidebar
       breadcrumbs={[
         {
-          label: PAGE_CONFIG.SERVER_PROVIDER.label,
+          label: `${serverProviderData?.name}`,
           onClick: handleNavigateBack,
         },
         {

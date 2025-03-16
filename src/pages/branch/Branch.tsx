@@ -17,6 +17,7 @@ import {
   ALIGNMENT,
   BASIC_MESSAGES,
   ITEMS_PER_PAGE,
+  TRUNCATE_LENGTH,
 } from "../../services/constant";
 import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
@@ -25,6 +26,8 @@ import { GridView } from "../../components/page/GridView";
 import MyToastContainer from "../../components/page/MyToastContainer";
 import CreateBranch from "./CreateBranch";
 import UpdateBranch from "./UpdateBranch";
+import { basicRender } from "../../components/ItemRender";
+import { truncateString } from "../../services/utils";
 
 const initQuery = {
   name: "",
@@ -70,6 +73,17 @@ const Branch = () => {
       label: "Tên chi nhánh",
       accessor: "name",
       align: ALIGNMENT.LEFT,
+    },
+    {
+      label: "Mô tả",
+      accessor: "description",
+      align: ALIGNMENT.LEFT,
+      render: (item: any) => {
+        return basicRender({
+          align: ALIGNMENT.LEFT,
+          content: truncateString(item.description, TRUNCATE_LENGTH),
+        });
+      },
     },
     {
       label: "Hành động",

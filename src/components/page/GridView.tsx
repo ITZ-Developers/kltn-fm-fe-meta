@@ -10,9 +10,9 @@ const ActionButton = ({
   role,
   title = "Sample",
 }: any) => {
-  const { hasRole } = useGlobalContext();
+  const { hasRoles } = useGlobalContext();
 
-  if (role && !hasRole(role)) {
+  if (role && !hasRoles(role)) {
     return null;
   }
 

@@ -1,4 +1,4 @@
-import { UploadIcon, XIcon } from "lucide-react";
+import { UploadIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
   formatToDDMMYYYY,
@@ -60,12 +60,12 @@ const DatePickerField = ({
               ? "text-gray-200"
               : "text-transparent"
           }`}
-          value={inputValue}
+          value={inputValue.split(" ")[0]}
           onChange={handleDateChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onClick={handleInputClick}
-          placeholder={placeholder}
+          placeholder={error ? undefined : placeholder}
         />
         {!inputValue && !isFocused && (
           <span className="absolute left-2 pointer-events-none text-gray-500">

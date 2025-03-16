@@ -8,6 +8,7 @@ import { branchController } from "../controllers/branchController.ts";
 import { serverProviderController } from "../controllers/serverProviderController.ts";
 import { customerController } from "../controllers/customerController.ts";
 import { locationController } from "../controllers/locationController.ts";
+import { dbConfigController } from "../controllers/dbConfigController.ts";
 
 const useApi = () => {
   const { fetchApi, loading } = useFetch();
@@ -21,6 +22,7 @@ const useApi = () => {
   const serverProvider = serverProviderController(fetchApi);
   const customer = customerController(fetchApi);
   const location = locationController(fetchApi);
+  const dbConfig = dbConfigController(fetchApi);
 
   return {
     auth,
@@ -33,6 +35,7 @@ const useApi = () => {
     serverProvider,
     customer,
     location,
+    dbConfig,
   };
 };
 

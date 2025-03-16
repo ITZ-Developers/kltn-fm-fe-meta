@@ -3,8 +3,8 @@ import { useGlobalContext } from "../GlobalProvider";
 import { BUTTON_TEXT } from "../../services/constant";
 
 const CreateButton = ({ role, onClick }: any) => {
-  const { hasRole } = useGlobalContext();
-  if (role && !hasRole(role)) {
+  const { hasRoles } = useGlobalContext();
+  if (role && !hasRoles(role)) {
     return null;
   }
   return (

@@ -17,6 +17,8 @@ import CreateCustomer from "../pages/customer/CreateCustomer";
 import Location from "../pages/location/Location";
 import CreateLocation from "../pages/location/CreateLocation";
 import UpdateLocation from "../pages/location/UpdateLocation";
+import CreateDbConfig from "../pages/dbConfig/CreateDbConfig";
+import UpdateDbConfig from "../pages/dbConfig/UpdateDbConfig";
 
 const ADMIN_CONFIG = {
   ADMIN: {
@@ -129,13 +131,13 @@ const LOCATION_CONFIG = {
   },
   CREATE_LOCATION: {
     label: "Thêm mới khu vực",
-    path: "/customer/location/create/:customerId",
+    path: "/customer/location/:customerId/create",
     role: "LO_C",
     element: <CreateLocation />,
   },
   UPDATE_LOCATION: {
     label: "Cập nhật khu vực",
-    path: "/customer/location/update/:id",
+    path: "/customer/location/:customerId/update/:id",
     role: "LO_U",
     element: <UpdateLocation />,
   },
@@ -193,6 +195,21 @@ const SERVER_PROVIDER_CONFIG = {
   },
 };
 
+const DB_CONFIG = {
+  CREATE_DB_CONFIG: {
+    label: "Thêm mới cấu hình CSDL",
+    path: "/customer/location/:customerId/db-config/:locationId/create",
+    role: "DB_C_C",
+    element: <CreateDbConfig />,
+  },
+  UPDATE_DB_CONFIG: {
+    label: "Cập nhật cấu hình CSDL",
+    path: "/customer/location/:customerId/db-config/:locationId/update/:id",
+    role: "DB_C_U",
+    element: <UpdateDbConfig />,
+  },
+};
+
 const PAGE_CONFIG = {
   ...ADMIN_CONFIG,
   ...ACCOUNT_BRANCH_CONFIG,
@@ -202,6 +219,7 @@ const PAGE_CONFIG = {
   ...BRANCH_CONFIG,
   ...SERVER_PROVIDER_CONFIG,
   ...LOCATION_CONFIG,
+  ...DB_CONFIG,
 };
 
 const SIDEBAR_MENUS = [

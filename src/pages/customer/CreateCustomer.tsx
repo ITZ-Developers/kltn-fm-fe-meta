@@ -5,7 +5,10 @@ import useForm from "../../hooks/useForm";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
 import { ImageUploadField } from "../../components/form/OtherField";
-import { StaticSelectField } from "../../components/form/SelectField";
+import {
+  SelectField,
+  StaticSelectField,
+} from "../../components/form/SelectField";
 import useApi from "../../hooks/useApi";
 import {
   BASIC_MESSAGES,
@@ -22,6 +25,7 @@ const CreateCustomer = () => {
   const { handleNavigateBack } = useQueryState({
     path: PAGE_CONFIG.CUSTOMER.path,
   });
+  const { branch } = useApi();
   const { customer, loading } = useApi();
   const validate = (form: any) => {
     const newErrors: any = {};
@@ -46,6 +50,9 @@ const CreateCustomer = () => {
     if (form.password !== form.confirmPassword) {
       newErrors.confirmPassword = "Mật khẩu xác nhận không trùng khớp";
     }
+    if (!form.branchId) {
+      newErrors.branchId = "Chi nhánh không hợp lệ";
+    }
     return newErrors;
   };
 
@@ -59,6 +66,7 @@ const CreateCustomer = () => {
       avatarPath: "",
       status: "",
       confirmPassword: "",
+      branchId: "",
     },
     validate
   );
@@ -90,6 +98,7 @@ const CreateCustomer = () => {
       activeItem={PAGE_CONFIG.CUSTOMER.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <FormCard
             title={PAGE_CONFIG.CREATE_CUSTOMER.label}
             children={
@@ -164,6 +173,15 @@ const CreateCustomer = () => {
                   />
                 </div>
                 <div className="flex flex-row space-x-2">
+                  <SelectField
+                    title="Chi nhánh"
+                    isRequired={true}
+                    fetchListApi={branch.autoComplete}
+                    placeholder="Chọn chi nhánh"
+                    value={form.branchId}
+                    onChange={(value: any) => handleChange("branchId", value)}
+                    error={errors.branchId}
+                  />
                   <StaticSelectField
                     title="Trạng thái"
                     isRequired={true}
@@ -173,7 +191,6 @@ const CreateCustomer = () => {
                     onChange={(value: any) => handleChange("status", value)}
                     error={errors.status}
                   />
-                  <span className="flex-1" />
                 </div>
                 <ActionSection
                   children={
@@ -188,7 +205,6 @@ const CreateCustomer = () => {
                   }
                 />
                 <MyToastContainer />
-                <LoadingDialog isVisible={loading} />
               </div>
             }
           />

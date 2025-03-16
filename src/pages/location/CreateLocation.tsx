@@ -13,22 +13,28 @@ import {
 } from "../../services/constant";
 import { toast } from "react-toastify";
 import MyToastContainer from "../../components/page/MyToastContainer";
-import { LoadingDialog } from "../../components/page/Dialog";
 import useQueryState from "../../hooks/useQueryState";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   DatePickerField,
   ImageUploadField,
 } from "../../components/form/OtherField";
 import { StaticSelectField } from "../../components/form/SelectField";
+import { parseDate } from "../../services/utils";
+import { LoadingDialog } from "../../components/page/Dialog";
 
 const CreateLocation = () => {
   const { customerId } = useParams();
-  const { handleNavigateBack } = useQueryState({
+  const { handleNavigateBack: backLocation } = useQueryState({
     path: `/customer/location/${customerId}`,
   });
-  const { location, customer } = useApi();
+  const { handleNavigateBack: backCustomer } = useQueryState({
+    path: PAGE_CONFIG.CUSTOMER.path,
+  });
+  const { location, loading } = useApi();
+  const { customer } = useApi();
+
   const validate = (form: any) => {
     const newErrors: any = {};
     if (!VALID_PATTERN.NAME.test(form.name)) {
@@ -40,22 +46,31 @@ const CreateLocation = () => {
     if (form.hotline && !VALID_PATTERN.PHONE.test(form.hotline)) {
       newErrors.hotline = "Đường dây nóng không hợp lệ";
     }
-    if (!form.status) {
+    if (form.status != 0 && !form.status) {
       newErrors.status = "Trạng thái không hợp lệ";
+    }
+    const startDate = parseDate(form.startDate);
+    const expiredDate = parseDate(form.expiredDate);
+    if (!expiredDate) {
+      newErrors.expiredDate = "Ngày hết hạn không hợp lệ";
+    } else if (!startDate || startDate >= expiredDate) {
+      newErrors.startDate = "Ngày bắt đầu phải nhỏ hơn ngày hết hạn";
     }
     return newErrors;
   };
+  const [customerData, setCustomerData] = useState<any>(null);
 
   useEffect(() => {
     if (!customerId) {
-      handleNavigateBack();
+      backLocation();
       return;
     }
     const fetchData = async () => {
       const res = await customer.get(customerId);
       if (!res.result) {
-        handleNavigateBack();
+        backLocation();
       }
+      setCustomerData(res.data);
     };
     fetchData();
   }, [customerId]);
@@ -75,9 +90,9 @@ const CreateLocation = () => {
 
   const handleSubmit = async () => {
     if (isValidForm()) {
-      const res = await location.create(form);
+      const res = await location.create({ customerId, ...form });
       if (res.result) {
-        handleNavigateBack();
+        backLocation();
       } else {
         toast.error(res.message || BASIC_MESSAGES.FAILED);
       }
@@ -90,8 +105,12 @@ const CreateLocation = () => {
     <Sidebar
       breadcrumbs={[
         {
+          label: `${customerData?.account?.fullName}`,
+          onClick: backCustomer,
+        },
+        {
           label: PAGE_CONFIG.LOCATION.label,
-          onClick: handleNavigateBack,
+          onClick: backLocation,
         },
         {
           label: PAGE_CONFIG.CREATE_LOCATION.label,
@@ -100,6 +119,7 @@ const CreateLocation = () => {
       activeItem={PAGE_CONFIG.CUSTOMER.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <FormCard
             title={PAGE_CONFIG.CREATE_LOCATION.label}
             children={
@@ -159,9 +179,9 @@ const CreateLocation = () => {
                     error={errors.startDate}
                   />
                   <DatePickerField
-                    title="Ngày kết thúc"
+                    title="Ngày hết hạn"
                     isRequired={true}
-                    placeholder="Chọn ngày kết thúc"
+                    placeholder="Chọn ngày hết hạn"
                     value={form.expiredDate}
                     onChange={(value: any) =>
                       handleChange("expiredDate", value)
@@ -172,7 +192,7 @@ const CreateLocation = () => {
                 <ActionSection
                   children={
                     <>
-                      <CancelButton onClick={handleNavigateBack} />
+                      <CancelButton onClick={backLocation} />
                       <SubmitButton
                         text={BUTTON_TEXT.CREATE}
                         color="royalblue"

@@ -31,6 +31,7 @@ import {
 
 const initQuery = {
   accountId: "",
+  branchId: "",
   status: "",
   page: 0,
   size: ITEMS_PER_PAGE,
@@ -45,7 +46,7 @@ const Customer = () => {
     hideModal: hideDeleteDialog,
     formConfig: deleteDialogConfig,
   } = useModal();
-  const { customer, admin } = useApi();
+  const { customer, admin, branch } = useApi();
   const {
     data,
     query,
@@ -76,6 +77,11 @@ const Customer = () => {
     {
       label: "Email",
       accessor: "account.email",
+      align: ALIGNMENT.LEFT,
+    },
+    {
+      label: "Chi nhánh",
+      accessor: "branch.name",
       align: ALIGNMENT.LEFT,
     },
     renderEnum({}),
@@ -145,6 +151,14 @@ const Customer = () => {
                   fetchListApi={admin.autoComplete}
                   placeholder="Họ và tên..."
                   labelKey="fullName"
+                />
+                <SelectBox
+                  value={query.branchId}
+                  onChange={(value: any) => {
+                    setQuery({ ...query, branchId: value });
+                  }}
+                  fetchListApi={branch.autoComplete}
+                  placeholder="Chi nhánh..."
                 />
                 <StaticSelectBox
                   value={query.status}

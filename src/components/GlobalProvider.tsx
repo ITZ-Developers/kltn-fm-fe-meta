@@ -23,7 +23,7 @@ const GlobalContext = createContext<{
   setProfile: Dispatch<SetStateAction<any>>;
   getRouters: () => any[];
   getSidebarMenus: () => any[];
-  hasRole: (role: string) => boolean;
+  hasRoles: (role: string | string[]) => boolean;
 }>({
   authorities: [],
   imgSrc: null,
@@ -34,7 +34,7 @@ const GlobalContext = createContext<{
   setProfile: () => {},
   getRouters: () => [],
   getSidebarMenus: () => [],
-  hasRole: () => false,
+  hasRoles: () => false,
 });
 
 export const GlobalProvider = ({ children }: any) => {
@@ -72,8 +72,11 @@ export const GlobalProvider = ({ children }: any) => {
     })).filter((group) => group.items.length > 0);
   };
 
-  const hasRole = (role: any) => {
-    return authorities.some((auth: any) => auth === role);
+  const hasRoles = (roles: string | string[]) => {
+    if (typeof roles === "string") {
+      return authorities.includes(roles);
+    }
+    return roles.every((role) => authorities.includes(role));
   };
 
   return (
@@ -88,7 +91,7 @@ export const GlobalProvider = ({ children }: any) => {
         setProfile,
         getRouters,
         getSidebarMenus,
-        hasRole,
+        hasRoles,
       }}
     >
       {children}

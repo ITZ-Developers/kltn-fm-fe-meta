@@ -84,6 +84,7 @@ const GROUP_KIND_MAP = {
 };
 
 const ITEMS_PER_PAGE = 10;
+const TRUNCATE_LENGTH = 150;
 const FETCH_INTERVAL = 300;
 
 const FILE_TYPES = {
@@ -100,6 +101,7 @@ const BASIC_MESSAGES = {
 };
 
 const BUTTON_TEXT = {
+  DB_CONFIG: "Cấu hình CSDL",
   LOGIN: "Đăng nhập",
   SEARCH: "Tìm kiếm",
   CREATE: "Thêm mới",
@@ -124,4 +126,5 @@ export {
   BASIC_MESSAGES,
   BUTTON_TEXT,
   FETCH_INTERVAL,
+  TRUNCATE_LENGTH,
 };

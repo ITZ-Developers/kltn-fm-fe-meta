@@ -3,6 +3,14 @@ import { getEnumItem, getMediaImage, getNestedValue } from "../services/utils";
 import { ALIGNMENT, STATUS_MAP } from "../services/constant";
 import { useGlobalContext } from "./GlobalProvider";
 
+const basicRender = ({ content, align = ALIGNMENT.LEFT }: any) => {
+  return (
+    <span className={`text-gray-300 p-4 text-${align} whitespace-nowrap`}>
+      {content}
+    </span>
+  );
+};
+
 const renderImage = ({
   label = "Ảnh",
   accessor = "avatarPath",
@@ -63,19 +71,18 @@ const renderHrefLink = ({
   onClick,
   role,
 }: any) => {
-  const { hasRole } = useGlobalContext();
+  const { hasRoles } = useGlobalContext();
 
   return {
     label,
     accessor,
     align,
     render: (item: any) => {
-      if (!onClick || (role && !hasRole(role))) {
-        return (
-          <span className={`text-gray-300 p-4 text-${align} whitespace-nowrap`}>
-            {getNestedValue(item, accessor)}
-          </span>
-        );
+      if (!onClick || (role && !hasRoles(role))) {
+        return basicRender({
+          content: getNestedValue(item, accessor),
+          align,
+        });
       }
       return (
         <a
@@ -89,4 +96,4 @@ const renderHrefLink = ({
   };
 };
 
-export { renderImage, renderEnum, renderHrefLink };
+export { basicRender, renderImage, renderEnum, renderHrefLink };

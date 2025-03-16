@@ -161,9 +161,9 @@ const UpdateRole = () => {
                           <div key={perm.id} className="flex items-center">
                             <CheckboxField
                               title={perm.name}
+                              subTitle={perm.permissionCode}
                               checked={form.permissionIds.includes(perm.id)}
                               onChange={() => handlePermissionChange(perm.id)}
-                              className="form-checkbox h-5 w-5 text-blue-500 transition duration-150 ease-in-out"
                             />
                           </div>
                         ))}

@@ -33,11 +33,13 @@ const UpdateBranch = ({ isVisible, formConfig }: any) => {
           description: data.description,
         });
       } else {
-        formConfig.hideModal();
+        formConfig?.hideModal();
       }
     };
 
-    fetchData();
+    if (formConfig?.initForm?.id) {
+      fetchData();
+    }
   }, [formConfig]);
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const UpdateBranch = ({ isVisible, formConfig }: any) => {
               <ActionSection
                 children={
                   <>
-                    <CancelButton onClick={formConfig.hideModal} />
+                    <CancelButton onClick={formConfig?.hideModal} />
                     <SubmitButton
                       text={BUTTON_TEXT.UPDATE}
                       onClick={handleSubmit}
