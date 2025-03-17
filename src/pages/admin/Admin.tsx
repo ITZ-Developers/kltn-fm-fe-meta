@@ -37,6 +37,7 @@ const initQuery = {
   fullName: "",
   groupId: "",
   status: "",
+  kind: GROUP_KIND_MAP.ADMIN.value,
   page: 0,
   size: ITEMS_PER_PAGE,
 };
