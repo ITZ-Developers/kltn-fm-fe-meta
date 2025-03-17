@@ -159,7 +159,7 @@ const configModalForm = ({
   fetchApi,
   refreshData,
   hideModal,
-  successMessage,
+  successMessage = BASIC_MESSAGES.SUCCESS,
   toast,
   initForm,
 }: any) => {
@@ -170,7 +170,9 @@ const configModalForm = ({
       if (res.result) {
         hideModal();
         toast.success(successMessage);
-        await refreshData();
+        if (refreshData) {
+          await refreshData();
+        }
       } else {
         toast.error(res.message || BASIC_MESSAGES.FAILED);
       }

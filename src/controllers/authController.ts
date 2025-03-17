@@ -63,6 +63,24 @@ export const authController = (fetchApi: any) => {
       authType: AUTH_TYPE.NONE,
     });
 
+  const inputKey = (payload: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/account/input-key",
+      method: METHOD.POST,
+      payload,
+      authType: AUTH_TYPE.BEARER,
+    });
+
+  const clearKey = (payload: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/account/clear-key",
+      method: METHOD.POST,
+      payload,
+      authType: AUTH_TYPE.BEARER,
+    });
+
   return {
     login,
     profile,
@@ -71,5 +89,7 @@ export const authController = (fetchApi: any) => {
     verifyCreditial,
     requestForgetPassword,
     resetPassword,
+    inputKey,
+    clearKey,
   };
 };

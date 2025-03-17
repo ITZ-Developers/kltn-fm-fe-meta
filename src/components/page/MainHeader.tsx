@@ -3,29 +3,36 @@ import { UserIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "./Breadcrumb";
 import { useGlobalContext } from "../GlobalProvider";
-import { ConfirmationDialog } from "./Dialog";
+import { configModalForm, ConfirmationDialog, LoadingDialog } from "./Dialog";
 import useModal from "../../hooks/useModal";
 import { removeSessionCache } from "../../services/storages";
 import { getMediaImage } from "../../services/utils";
 import { PAGE_CONFIG } from "../PageConfig";
-
-const OptionButton = ({ label, onClick }: any) => {
-  return (
-    <button
-      className="flex w-full items-center px-4 py-2 text-left text-sm text-white hover:bg-gray-600"
-      onClick={onClick}
-    >
-      {label}
-    </button>
-  );
-};
+import { OptionButton } from "../form/Button";
+import InputKey from "../../pages/auth/InputKey";
+import ClearKey from "../../pages/auth/ClearKey";
+import useApi from "../../hooks/useApi";
+import { toast } from "react-toastify";
 
 const MainHeader = ({ breadcrumbs }: any) => {
+  const { auth, loading } = useApi();
   const { profile } = useGlobalContext();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { isModalVisible, showModal, hideModal, formConfig } = useModal();
+  const {
+    isModalVisible: inputKeyFormVisible,
+    showModal: showInputKeyForm,
+    hideModal: hideInputKeyForm,
+    formConfig: inputKeyFormConfig,
+  } = useModal();
+  const {
+    isModalVisible: clearKeyFormVisible,
+    showModal: showClearKeyForm,
+    hideModal: hideClearKeyForm,
+    formConfig: clearKeyFormConfig,
+  } = useModal();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -66,12 +73,48 @@ const MainHeader = ({ breadcrumbs }: any) => {
     });
   };
 
+  const handleInputKey = () => {
+    setIsDropdownOpen(false);
+    showInputKeyForm(
+      configModalForm({
+        label: PAGE_CONFIG.INPUT_KEY.label,
+        fetchApi: auth.inputKey,
+        hideModal: hideInputKeyForm,
+        toast,
+        initForm: { privateKey: "" },
+      })
+    );
+  };
+
+  const handleClearKey = () => {
+    setIsDropdownOpen(false);
+    showClearKeyForm(
+      configModalForm({
+        label: PAGE_CONFIG.CLEAR_KEY.label,
+        fetchApi: auth.clearKey,
+        hideModal: hideClearKeyForm,
+        toast,
+        initForm: { password: "" },
+      })
+    );
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
   return (
-    <div>
+    <>
+      <LoadingDialog isVisible={loading} />
+      <ConfirmationDialog isVisible={isModalVisible} formConfig={formConfig} />
+      <InputKey
+        isVisible={inputKeyFormVisible}
+        formConfig={inputKeyFormConfig}
+      />
+      <ClearKey
+        isVisible={clearKeyFormVisible}
+        formConfig={clearKeyFormConfig}
+      />
       <header className="flex items-center">
         <div className="flex items-center justify-between w-full">
           <Breadcrumb items={breadcrumbs} />
@@ -96,14 +139,24 @@ const MainHeader = ({ breadcrumbs }: any) => {
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 rounded-lg bg-gray-700 py-2 shadow-lg transition-opacity duration-200">
                 <OptionButton
-                  label="Hồ sơ"
+                  label={PAGE_CONFIG.PROFILE.label}
                   onClick={() => handleClickButton(PAGE_CONFIG.PROFILE.path)}
                 />
                 <OptionButton
-                  label="Đổi mật khẩu"
+                  label={PAGE_CONFIG.CHANGE_PASSWORD.label}
                   onClick={() =>
                     handleClickButton(PAGE_CONFIG.CHANGE_PASSWORD.path)
                   }
+                />
+                <OptionButton
+                  role={PAGE_CONFIG.INPUT_KEY.role}
+                  label={PAGE_CONFIG.INPUT_KEY.label}
+                  onClick={handleInputKey}
+                />
+                <OptionButton
+                  role={PAGE_CONFIG.CLEAR_KEY.role}
+                  label={PAGE_CONFIG.CLEAR_KEY.label}
+                  onClick={handleClearKey}
                 />
                 <OptionButton label="Đăng xuất" onClick={handleLogout} />
               </div>
@@ -111,8 +164,7 @@ const MainHeader = ({ breadcrumbs }: any) => {
           </div>
         </div>
       </header>
-      <ConfirmationDialog isVisible={isModalVisible} formConfig={formConfig} />
-    </div>
+    </>
   );
 };
 

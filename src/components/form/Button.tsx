@@ -1,6 +1,7 @@
 import { PenLineIcon, RotateCcwIcon, TrashIcon } from "lucide-react";
 import { ActionButton } from "../page/GridView";
 import { BUTTON_TEXT } from "../../services/constant";
+import { useGlobalContext } from "../GlobalProvider";
 
 const SubmitButton = ({ text, onClick, color = "royalblue" }: any) => {
   return (
@@ -73,6 +74,23 @@ const Button = ({ onPress, title = "SAMPLE", icon: Icon }: any) => {
   );
 };
 
+const OptionButton = ({ label, onClick, role }: any) => {
+  const { hasRoles } = useGlobalContext();
+
+  if (role && !hasRoles(role)) {
+    return null;
+  }
+
+  return (
+    <button
+      className="flex w-full items-center px-4 py-2 text-left text-sm text-white hover:bg-gray-600"
+      onClick={onClick}
+    >
+      {label}
+    </button>
+  );
+};
+
 export {
   Button,
   SubmitButton,
@@ -80,4 +98,5 @@ export {
   ActionEditButton,
   ActionDeleteButton,
   ActionResetMfaButton,
+  OptionButton,
 };

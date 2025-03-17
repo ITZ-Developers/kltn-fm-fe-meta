@@ -214,6 +214,17 @@ const DB_CONFIG = {
   },
 };
 
+const AUTH_CONFIG = {
+  INPUT_KEY: {
+    label: "Nhập khóa hệ thống",
+    role: "ACC_I_K",
+  },
+  CLEAR_KEY: {
+    label: "Xóa khóa hệ thống",
+    role: "ACC_C_K",
+  },
+};
+
 const PAGE_CONFIG = {
   ...ADMIN_CONFIG,
   ...ACCOUNT_BRANCH_CONFIG,
@@ -224,6 +235,7 @@ const PAGE_CONFIG = {
   ...SERVER_PROVIDER_CONFIG,
   ...LOCATION_CONFIG,
   ...DB_CONFIG,
+  ...AUTH_CONFIG,
 };
 
 const SIDEBAR_MENUS = [
