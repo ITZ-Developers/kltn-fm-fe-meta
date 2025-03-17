@@ -227,6 +227,11 @@ const extractDatabaseName = (jdbcUrl: string) => {
   return match ? match[1] : null;
 };
 
+const extractHostAndPort = (jdbcUrl: string) => {
+  const match = jdbcUrl.match(/jdbc:mysql:\/\/([^:/]+):(\d+)/);
+  return match ? { host: match[1], port: parseInt(match[2], 10) } : null;
+};
+
 export {
   encrypt,
   decrypt,
@@ -245,4 +250,5 @@ export {
   parseDate,
   truncateToDDMMYYYY,
   extractDatabaseName,
+  extractHostAndPort,
 };

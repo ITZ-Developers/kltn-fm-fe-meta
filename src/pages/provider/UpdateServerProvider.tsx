@@ -16,6 +16,7 @@ import { LoadingDialog } from "../../components/page/Dialog";
 import useQueryState from "../../hooks/useQueryState";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { extractHostAndPort } from "../../services/utils";
 
 const UpdateServerProvider = () => {
   const { id } = useParams();
@@ -64,13 +65,14 @@ const UpdateServerProvider = () => {
       if (res.result) {
         const data = res.data;
         setServerProviderData(data);
+        const { host, port }: any = extractHostAndPort(data.mySqlJdbcUrl);
         setForm({
-          host: data.host,
+          host,
           maxTenant: data.maxTenant,
           mySqlRootPassword: data.mySqlRootPassword,
           mySqlRootUser: data.mySqlRootUser,
           name: data.name,
-          port: data.port,
+          port,
           url: data.url,
         });
       } else {
