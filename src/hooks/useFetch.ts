@@ -55,7 +55,7 @@ const useFetch = () => {
         method: options.method,
         headers,
         body:
-          options.method !== "GET" && options.payload
+          options.method !== METHOD.GET && options.payload
             ? options.payload instanceof FormData
               ? options.payload
               : JSON.stringify(options.payload)
