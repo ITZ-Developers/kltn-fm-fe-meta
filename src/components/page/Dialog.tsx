@@ -102,6 +102,32 @@ const LoadingDialog = ({
   );
 };
 
+const configResetMfaDialog = ({
+  label,
+  resetApi,
+  refreshData,
+  hideModal,
+  toast,
+}: any) => {
+  return {
+    title: label,
+    message: "Bạn có muốn đặt lại mã xác thực không?",
+    color: "mediumseagreen",
+    onConfirm: async () => {
+      hideModal();
+      const res = await resetApi();
+      if (res.result) {
+        toast.success(BASIC_MESSAGES.RESETED);
+        await refreshData();
+      } else {
+        toast.error(res.message || BASIC_MESSAGES.FAILED);
+      }
+    },
+    confirmText: BUTTON_TEXT.SUBMIT,
+    onCancel: hideModal,
+  };
+};
+
 const configDeleteDialog = ({
   label,
   deleteApi,
@@ -160,4 +186,5 @@ export {
   LoadingDialog,
   configDeleteDialog,
   configModalForm,
+  configResetMfaDialog,
 };

@@ -19,6 +19,7 @@ import {
 import { useGridView } from "../../hooks/useGridView";
 import {
   configDeleteDialog,
+  configResetMfaDialog,
   ConfirmationDialog,
 } from "../../components/page/Dialog";
 import useModal from "../../hooks/useModal";
@@ -27,6 +28,7 @@ import { SelectBox, StaticSelectBox } from "../../components/page/SelectBox";
 import {
   ActionDeleteButton,
   ActionEditButton,
+  ActionResetMfaButton,
 } from "../../components/form/Button";
 import MyToastContainer from "../../components/page/MyToastContainer";
 import { toast } from "react-toastify";
@@ -87,6 +89,10 @@ const Admin = () => {
       render: (item: any) => {
         return (
           <span className="flex items-center text-center justify-center space-x-2">
+            <ActionResetMfaButton
+              role={PAGE_CONFIG.RESET_MFA_ADMIN.role}
+              onClick={() => onResetMfaButtonClick(item.id)}
+            />
             <ActionEditButton
               role={PAGE_CONFIG.UPDATE_ADMIN.role}
               onClick={() =>
@@ -104,6 +110,18 @@ const Admin = () => {
       },
     },
   ];
+
+  const onResetMfaButtonClick = (id: any) => {
+    showModal(
+      configResetMfaDialog({
+        label: PAGE_CONFIG.RESET_MFA_ADMIN.label,
+        resetApi: () => admin.resetMfa(id),
+        refreshData: () => handleSubmitQuery(query),
+        hideModal,
+        toast,
+      })
+    );
+  };
 
   const onDeleteButtonClick = (id: any) => {
     showModal(

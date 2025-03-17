@@ -1,4 +1,4 @@
-import { PenLineIcon, TrashIcon } from "lucide-react";
+import { PenLineIcon, RotateCcwIcon, TrashIcon } from "lucide-react";
 import { ActionButton } from "../page/GridView";
 import { BUTTON_TEXT } from "../../services/constant";
 
@@ -22,6 +22,18 @@ const CancelButton = ({ text = BUTTON_TEXT.CANCEL, onClick }: any) => {
     >
       {text}
     </button>
+  );
+};
+
+const ActionResetMfaButton = ({ onClick, role }: any) => {
+  return (
+    <ActionButton
+      onClick={onClick}
+      Icon={RotateCcwIcon}
+      role={role}
+      title={BUTTON_TEXT.RESET_MFA}
+      color="mediumseagreen"
+    />
   );
 };
 
@@ -67,4 +79,5 @@ export {
   CancelButton,
   ActionEditButton,
   ActionDeleteButton,
+  ActionResetMfaButton,
 };

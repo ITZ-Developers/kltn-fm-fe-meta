@@ -53,6 +53,15 @@ export const adminController = (fetchApi: any) => {
       authType: AUTH_TYPE.BEARER,
     });
 
+  const resetMfa = (id: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/account/reset-mfa",
+      method: METHOD.PUT,
+      payload: { id },
+      authType: AUTH_TYPE.BEARER,
+    });
+
   return {
     list,
     get,
@@ -60,5 +69,6 @@ export const adminController = (fetchApi: any) => {
     del,
     update,
     autoComplete,
+    resetMfa,
   };
 };

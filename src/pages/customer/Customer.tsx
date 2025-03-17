@@ -2,9 +2,11 @@ import { toast } from "react-toastify";
 import {
   ActionDeleteButton,
   ActionEditButton,
+  ActionResetMfaButton,
 } from "../../components/form/Button";
 import {
   configDeleteDialog,
+  configResetMfaDialog,
   ConfirmationDialog,
 } from "../../components/page/Dialog";
 import { PAGE_CONFIG } from "../../components/PageConfig";
@@ -92,6 +94,10 @@ const Customer = () => {
       render: (item: any) => {
         return (
           <span className="flex items-center text-center justify-center space-x-2">
+            <ActionResetMfaButton
+              role={PAGE_CONFIG.RESET_MFA_ADMIN.role}
+              onClick={() => onResetMfaButtonClick(item.account.id)}
+            />
             <ActionEditButton
               role={PAGE_CONFIG.UPDATE_CUSTOMER.role}
               onClick={() => onUpdateButtonClick(item.id)}
@@ -105,6 +111,18 @@ const Customer = () => {
       },
     },
   ];
+
+  const onResetMfaButtonClick = (id: any) => {
+    showDeleteDialog(
+      configResetMfaDialog({
+        label: PAGE_CONFIG.RESET_MFA_ADMIN.label,
+        resetApi: () => admin.resetMfa(id),
+        refreshData: () => handleSubmitQuery(query),
+        hideModal: hideDeleteDialog,
+        toast,
+      })
+    );
+  };
 
   const onDeleteButtonClick = (id: any) => {
     showDeleteDialog(

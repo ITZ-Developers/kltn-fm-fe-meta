@@ -44,6 +44,10 @@ const ADMIN_CONFIG = {
     label: "Xóa quản trị viên",
     role: "ACC_D",
   },
+  RESET_MFA_ADMIN: {
+    label: "Đặt lại mã xác thực hai bước",
+    role: "ACC_R_MFA",
+  },
 };
 
 const ACCOUNT_BRANCH_CONFIG = {

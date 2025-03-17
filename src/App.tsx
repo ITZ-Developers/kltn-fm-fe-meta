@@ -3,7 +3,7 @@ import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import { useGlobalContext } from "./components/GlobalProvider";
 import Loading from "./pages/Loading";
-import Login from "./pages/Login";
+import Login from "./pages/auth/Login";
 import useApi from "./hooks/useApi";
 import RedirectHome from "./components/RedirectHome";
 

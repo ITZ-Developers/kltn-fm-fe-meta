@@ -1,11 +1,7 @@
 import { API_URL, AUTH_TYPE, METHOD } from "../services/constant.ts";
 
 export const authController = (fetchApi: any) => {
-  const login = (payload: {
-    username: string;
-    password: string;
-    grant_type: string;
-  }) =>
+  const login = (payload: any) =>
     fetchApi({
       apiUrl: API_URL.MASTER_API,
       endpoint: "/api/token",
@@ -40,10 +36,20 @@ export const authController = (fetchApi: any) => {
       authType: AUTH_TYPE.BEARER,
     });
 
+  const verifyCreditial = (payload: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/account/verify-credential",
+      method: METHOD.POST,
+      payload,
+      authType: AUTH_TYPE.NONE,
+    });
+
   return {
     login,
     profile,
     updateProfile,
     changePassword,
+    verifyCreditial,
   };
 };
