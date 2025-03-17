@@ -45,11 +45,31 @@ export const authController = (fetchApi: any) => {
       authType: AUTH_TYPE.NONE,
     });
 
+  const requestForgetPassword = (email: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/account/request-forget-password",
+      method: METHOD.POST,
+      payload: { email },
+      authType: AUTH_TYPE.NONE,
+    });
+
+  const resetPassword = (payload: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/account/reset-password",
+      method: METHOD.POST,
+      payload,
+      authType: AUTH_TYPE.NONE,
+    });
+
   return {
     login,
     profile,
     updateProfile,
     changePassword,
     verifyCreditial,
+    requestForgetPassword,
+    resetPassword,
   };
 };

@@ -17,26 +17,16 @@ import { setStorageData } from "../../services/storages";
 import MyToastContainer from "../../components/page/MyToastContainer";
 import useApi from "../../hooks/useApi";
 import { useState } from "react";
-import { ActionSection } from "../../components/form/FormCard";
-
-const BasicCardForm = ({ title = "Login", children }: any) => (
-  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 p-4">
-    <div className="w-full max-w-sm rounded-xl bg-gray-900/95 p-8 shadow-2xl backdrop-blur-sm">
-      <h2 className="mb-6 text-center text-2xl font-semibold text-blue-500">
-        {title}
-      </h2>
-      {children}
-    </div>
-  </div>
-);
-
-const ImageBase64 = ({ imgString }: any) => (
-  <div className="flex mx-auto items-center justify-center w-[200px] h-[200px] border border-gray-600 bg-gray-800 rounded-md overflow-hidden">
-    <img src={imgString} className="w-full h-full object-cover" />
-  </div>
-);
+import {
+  ActionSection,
+  BasicCardForm,
+  HrefLink,
+  ImageBase64,
+} from "../../components/form/FormCard";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const { auth, loading } = useApi();
   const [isMfa, setIsMfa] = useState(false);
   const [qrUrl, setQrUrl] = useState<any>(null);
@@ -151,6 +141,10 @@ const Login = () => {
               onChangeText={(value: any) => handleChange("password", value)}
               error={errors.password}
               type="password"
+            />
+            <HrefLink
+              label={"Quên mật khẩu?"}
+              onClick={() => navigate("/forgot-password")}
             />
             <Button
               title={BUTTON_TEXT.LOGIN}

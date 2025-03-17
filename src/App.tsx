@@ -6,6 +6,8 @@ import Loading from "./pages/Loading";
 import Login from "./pages/auth/Login";
 import useApi from "./hooks/useApi";
 import RedirectHome from "./components/RedirectHome";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 const App = () => {
   const { profile, getSidebarMenus, setProfile, getRouters } =
@@ -42,6 +44,8 @@ const App = () => {
               ) : (
                 <>
                   <Route path="/" element={<Login />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                 </>
               )}
               <Route path="*" element={<NotFound />} />

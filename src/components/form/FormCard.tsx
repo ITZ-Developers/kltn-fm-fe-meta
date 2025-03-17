@@ -44,4 +44,41 @@ const ActionSection = ({ children }: any) => {
   );
 };
 
-export { FormCard, ActionSection, ModalForm };
+const BasicCardForm = ({ title = "Login", children }: any) => (
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 p-4">
+    <div className="w-full max-w-sm rounded-xl bg-gray-900/95 p-8 shadow-2xl backdrop-blur-sm">
+      <h2 className="mb-6 text-center text-2xl font-semibold text-blue-500">
+        {title}
+      </h2>
+      {children}
+    </div>
+  </div>
+);
+
+const ImageBase64 = ({ imgString }: any) => (
+  <div className="flex mx-auto items-center justify-center w-[200px] h-[200px] border border-gray-600 bg-gray-800 rounded-md overflow-hidden">
+    <img src={imgString} className="w-full h-full object-cover" />
+  </div>
+);
+
+const HrefLink = ({ label = "SAMPLE", onClick }: any) => {
+  return (
+    <div className="text-right">
+      <a
+        onClick={onClick}
+        className="text-sm font-semibold text-blue-500 hover:underline hover:cursor-pointer"
+      >
+        {label}
+      </a>
+    </div>
+  );
+};
+
+export {
+  FormCard,
+  ActionSection,
+  ModalForm,
+  HrefLink,
+  ImageBase64,
+  BasicCardForm,
+};

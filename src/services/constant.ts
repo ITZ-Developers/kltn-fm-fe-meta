@@ -95,6 +95,7 @@ const FILE_TYPES = {
 const BASIC_MESSAGES = {
   INVALID_FORM: "Vui lòng kiểm tra lại thông tin",
   VERIFY_FAILED: "Xác thực thất bại",
+  SUCCESS: "Yêu cầu thành công",
   FAILED: "Yêu cầu thất bại",
   LOGGED_IN: "Đăng nhập thành công",
   LOG_IN_FAILED: "Đăng nhập thất bại",
@@ -107,6 +108,7 @@ const BASIC_MESSAGES = {
 const BUTTON_TEXT = {
   DB_CONFIG: "Cấu hình CSDL",
   SUBMIT: "Xác nhận",
+  CONTINUE: "Tiếp tục",
   LOGIN: "Đăng nhập",
   TWO_FACTOR: "Xác thực hai bước",
   RESET_MFA: "Đặt lại MFA",
