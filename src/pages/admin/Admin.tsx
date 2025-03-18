@@ -2,6 +2,7 @@ import { GridView } from "../../components/page/GridView";
 import Sidebar from "../../components/page/Sidebar";
 import useApi from "../../hooks/useApi";
 import {
+  renderActionButton,
   renderEnum,
   renderHrefLink,
   renderImage,
@@ -83,33 +84,33 @@ const Admin = () => {
       align: ALIGNMENT.LEFT,
     },
     renderEnum({}),
-    {
-      label: "Hành động",
-      accessor: "action",
-      align: ALIGNMENT.CENTER,
-      render: (item: any) => {
-        return (
-          <span className="flex items-center text-center justify-center space-x-2">
-            <ActionResetMfaButton
-              role={PAGE_CONFIG.RESET_MFA_ADMIN.role}
-              onClick={() => onResetMfaButtonClick(item.id)}
+    renderActionButton({
+      role: [
+        PAGE_CONFIG.RESET_MFA_ADMIN.role,
+        PAGE_CONFIG.UPDATE_ADMIN.role,
+        PAGE_CONFIG.DELETE_ADMIN.role,
+      ],
+      renderChildren: (item: any) => (
+        <>
+          <ActionResetMfaButton
+            role={PAGE_CONFIG.RESET_MFA_ADMIN.role}
+            onClick={() => onResetMfaButtonClick(item.id)}
+          />
+          <ActionEditButton
+            role={PAGE_CONFIG.UPDATE_ADMIN.role}
+            onClick={() =>
+              navigate(`/admin/update/${item.id}`, { state: { query } })
+            }
+          />
+          {!item.isSuperAdmin && item.id !== profile.id && (
+            <ActionDeleteButton
+              role={PAGE_CONFIG.DELETE_ADMIN.role}
+              onClick={() => onDeleteButtonClick(item.id)}
             />
-            <ActionEditButton
-              role={PAGE_CONFIG.UPDATE_ADMIN.role}
-              onClick={() =>
-                navigate(`/admin/update/${item.id}`, { state: { query } })
-              }
-            />
-            {!item.isSuperAdmin && item.id !== profile.id && (
-              <ActionDeleteButton
-                role={PAGE_CONFIG.DELETE_ADMIN.role}
-                onClick={() => onDeleteButtonClick(item.id)}
-              />
-            )}
-          </span>
-        );
-      },
-    },
+          )}
+        </>
+      ),
+    }),
   ];
 
   const onResetMfaButtonClick = (id: any) => {

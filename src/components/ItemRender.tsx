@@ -96,4 +96,37 @@ const renderHrefLink = ({
   };
 };
 
-export { basicRender, renderImage, renderEnum, renderHrefLink };
+const renderActionButton = ({
+  label = "Hành động",
+  accessor = "action",
+  align = ALIGNMENT.CENTER,
+  role,
+  renderChildren,
+}: any) => {
+  const { hasAnyRoles } = useGlobalContext();
+
+  if (role && !hasAnyRoles(role)) {
+    return null;
+  }
+
+  return {
+    label,
+    accessor,
+    align,
+    render: (item: any) => {
+      return (
+        <span className="flex items-center text-center justify-center space-x-2">
+          {renderChildren?.(item)}
+        </span>
+      );
+    },
+  };
+};
+
+export {
+  basicRender,
+  renderImage,
+  renderEnum,
+  renderHrefLink,
+  renderActionButton,
+};

@@ -36,6 +36,8 @@ const GridView = ({
   itemsPerPage,
   onPageChange,
 }: any) => {
+  const filteredColumns = columns.filter(Boolean);
+
   return (
     <div className="w-full">
       {!data || data?.length === 0 ? (
@@ -48,13 +50,15 @@ const GridView = ({
                 <thead className="bg-gray-700 text-gray-200">
                   <tr className="text-sm leading-normal">
                     <th className="p-4 text-left rounded-tl-lg">#</th>
-                    {columns.map((col: any, index: number) => (
+                    {filteredColumns.map((col: any, index: number) => (
                       <th
                         key={col.accessor}
                         className={`p-4 text-${
                           col.align
                         } whitespace-nowrap font-semibold ${
-                          index === columns.length - 1 ? "rounded-tr-lg" : ""
+                          index === filteredColumns.length - 1
+                            ? "rounded-tr-lg"
+                            : ""
                         }`}
                       >
                         {col.label}
@@ -68,7 +72,7 @@ const GridView = ({
                       <td className="p-4 text-left">
                         {index + 1 + currentPage * itemsPerPage}
                       </td>
-                      {columns.map((col: any) => (
+                      {filteredColumns.map((col: any) => (
                         <td key={col.accessor}>
                           {col.render ? (
                             col.render(item)

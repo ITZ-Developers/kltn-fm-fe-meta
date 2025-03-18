@@ -26,6 +26,7 @@ import MyToastContainer from "../../components/page/MyToastContainer";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SelectBox, StaticSelectBox } from "../../components/page/SelectBox";
 import {
+  renderActionButton,
   renderEnum,
   renderHrefLink,
   renderImage,
@@ -87,29 +88,29 @@ const Customer = () => {
       align: ALIGNMENT.LEFT,
     },
     renderEnum({}),
-    {
-      label: "Hành động",
-      accessor: "action",
-      align: ALIGNMENT.CENTER,
-      render: (item: any) => {
-        return (
-          <span className="flex items-center text-center justify-center space-x-2">
-            <ActionResetMfaButton
-              role={PAGE_CONFIG.RESET_MFA_ADMIN.role}
-              onClick={() => onResetMfaButtonClick(item.account.id)}
-            />
-            <ActionEditButton
-              role={PAGE_CONFIG.UPDATE_CUSTOMER.role}
-              onClick={() => onUpdateButtonClick(item.id)}
-            />
-            <ActionDeleteButton
-              role={PAGE_CONFIG.DELETE_CUSTOMER.role}
-              onClick={() => onDeleteButtonClick(item.id)}
-            />
-          </span>
-        );
-      },
-    },
+    renderActionButton({
+      role: [
+        PAGE_CONFIG.RESET_MFA_ADMIN.role,
+        PAGE_CONFIG.UPDATE_CUSTOMER.role,
+        PAGE_CONFIG.DELETE_CUSTOMER.role,
+      ],
+      renderChildren: (item: any) => (
+        <>
+          <ActionResetMfaButton
+            role={PAGE_CONFIG.RESET_MFA_ADMIN.role}
+            onClick={() => onResetMfaButtonClick(item.account.id)}
+          />
+          <ActionEditButton
+            role={PAGE_CONFIG.UPDATE_CUSTOMER.role}
+            onClick={() => onUpdateButtonClick(item.id)}
+          />
+          <ActionDeleteButton
+            role={PAGE_CONFIG.DELETE_CUSTOMER.role}
+            onClick={() => onDeleteButtonClick(item.id)}
+          />
+        </>
+      ),
+    }),
   ];
 
   const onResetMfaButtonClick = (id: any) => {

@@ -1,7 +1,11 @@
 import { GridView } from "../../components/page/GridView";
 import Sidebar from "../../components/page/Sidebar";
 import useApi from "../../hooks/useApi";
-import { basicRender, renderEnum } from "../../components/ItemRender";
+import {
+  basicRender,
+  renderActionButton,
+  renderEnum,
+} from "../../components/ItemRender";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import { ToolBar } from "../../components/page/ToolBar";
 import InputBox from "../../components/page/InputBox";
@@ -68,23 +72,19 @@ const Role = () => {
       align: ALIGNMENT.CENTER,
       dataMap: GROUP_KIND_MAP,
     }),
-    {
-      label: "Hành động",
-      accessor: "action",
-      align: ALIGNMENT.CENTER,
-      render: (item: any) => {
-        return (
-          <span className="flex items-center text-center justify-center space-x-2">
-            <ActionEditButton
-              role={PAGE_CONFIG.UPDATE_ROLE.role}
-              onClick={() =>
-                navigate(`/role/update/${item.id}`, { state: { query } })
-              }
-            />
-          </span>
-        );
-      },
-    },
+    renderActionButton({
+      role: [PAGE_CONFIG.UPDATE_ROLE.role],
+      renderChildren: (item: any) => (
+        <>
+          <ActionEditButton
+            role={PAGE_CONFIG.UPDATE_ROLE.role}
+            onClick={() =>
+              navigate(`/role/update/${item.id}`, { state: { query } })
+            }
+          />
+        </>
+      ),
+    }),
   ];
 
   return (

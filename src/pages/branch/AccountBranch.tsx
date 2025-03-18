@@ -25,7 +25,7 @@ import useQueryState from "../../hooks/useQueryState";
 import { SelectBox } from "../../components/page/SelectBox";
 import CreateAccountBranch from "./CreateAccountBranch";
 import { useEffect, useState } from "react";
-import { basicRender } from "../../components/ItemRender";
+import { basicRender, renderActionButton } from "../../components/ItemRender";
 import { truncateString } from "../../services/utils";
 
 const AccountBranch = () => {
@@ -101,21 +101,17 @@ const AccountBranch = () => {
         });
       },
     },
-    {
-      label: "Hành động",
-      accessor: "action",
-      align: ALIGNMENT.CENTER,
-      render: (item: any) => {
-        return (
-          <span className="flex items-center text-center justify-center space-x-2">
-            <ActionDeleteButton
-              role={PAGE_CONFIG.DELETE_ACCOUNT_BRANCH.role}
-              onClick={() => onDeleteButtonClick(item.id)}
-            />
-          </span>
-        );
-      },
-    },
+    renderActionButton({
+      role: [PAGE_CONFIG.DELETE_ACCOUNT_BRANCH.role],
+      renderChildren: (item: any) => (
+        <>
+          <ActionDeleteButton
+            role={PAGE_CONFIG.DELETE_ACCOUNT_BRANCH.role}
+            onClick={() => onDeleteButtonClick(item.id)}
+          />
+        </>
+      ),
+    }),
   ];
 
   const onDeleteButtonClick = (id: any) => {

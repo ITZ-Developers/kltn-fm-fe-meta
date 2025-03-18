@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import InputBox from "../../components/page/InputBox";
 import {
   basicRender,
+  renderActionButton,
   renderEnum,
   renderImage,
 } from "../../components/ItemRender";
@@ -183,35 +184,36 @@ const Location = () => {
       render: (item: any) => renderExpiredDateField(item),
     },
     renderEnum({}),
-    {
-      label: "Hành động",
-      accessor: "action",
-      align: ALIGNMENT.CENTER,
-      render: (item: any) => {
-        return (
-          <span className="flex items-center text-center justify-center space-x-2">
-            <ActionButton
-              onClick={() => onDbConfigButtonClick(item)}
-              Icon={DatabaseIcon}
-              role={[
-                PAGE_CONFIG.CREATE_DB_CONFIG.role,
-                PAGE_CONFIG.UPDATE_DB_CONFIG.role,
-              ]}
-              title={BUTTON_TEXT.DB_CONFIG}
-              color="goldenrod"
-            />
-            <ActionEditButton
-              role={PAGE_CONFIG.UPDATE_LOCATION.role}
-              onClick={() => onUpdateButtonClick(item.id)}
-            />
-            <ActionDeleteButton
-              role={PAGE_CONFIG.DELETE_LOCATION.role}
-              onClick={() => onDeleteButtonClick(item.id)}
-            />
-          </span>
-        );
-      },
-    },
+    renderActionButton({
+      role: [
+        PAGE_CONFIG.CREATE_DB_CONFIG.role,
+        PAGE_CONFIG.UPDATE_DB_CONFIG.role,
+        PAGE_CONFIG.UPDATE_LOCATION.role,
+        PAGE_CONFIG.DELETE_LOCATION.role,
+      ],
+      renderChildren: (item: any) => (
+        <>
+          <ActionButton
+            onClick={() => onDbConfigButtonClick(item)}
+            Icon={DatabaseIcon}
+            role={[
+              PAGE_CONFIG.CREATE_DB_CONFIG.role,
+              PAGE_CONFIG.UPDATE_DB_CONFIG.role,
+            ]}
+            title={BUTTON_TEXT.DB_CONFIG}
+            color="goldenrod"
+          />
+          <ActionEditButton
+            role={PAGE_CONFIG.UPDATE_LOCATION.role}
+            onClick={() => onUpdateButtonClick(item.id)}
+          />
+          <ActionDeleteButton
+            role={PAGE_CONFIG.DELETE_LOCATION.role}
+            onClick={() => onDeleteButtonClick(item.id)}
+          />
+        </>
+      ),
+    }),
   ];
 
   const onDbConfigButtonClick = (item: any) => {

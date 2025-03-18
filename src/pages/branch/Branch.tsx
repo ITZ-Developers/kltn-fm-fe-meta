@@ -26,7 +26,7 @@ import { GridView } from "../../components/page/GridView";
 import MyToastContainer from "../../components/page/MyToastContainer";
 import CreateBranch from "./CreateBranch";
 import UpdateBranch from "./UpdateBranch";
-import { basicRender } from "../../components/ItemRender";
+import { basicRender, renderActionButton } from "../../components/ItemRender";
 import { truncateString } from "../../services/utils";
 
 const initQuery = {
@@ -85,25 +85,21 @@ const Branch = () => {
         });
       },
     },
-    {
-      label: "Hành động",
-      accessor: "action",
-      align: ALIGNMENT.CENTER,
-      render: (item: any) => {
-        return (
-          <span className="flex items-center text-center justify-center space-x-2">
-            <ActionEditButton
-              role={PAGE_CONFIG.UPDATE_BRANCH.role}
-              onClick={() => onUpdateButtonClick(item.id)}
-            />
-            <ActionDeleteButton
-              role={PAGE_CONFIG.DELETE_BRANCH.role}
-              onClick={() => onDeleteButtonClick(item.id)}
-            />
-          </span>
-        );
-      },
-    },
+    renderActionButton({
+      role: [PAGE_CONFIG.UPDATE_BRANCH.role, PAGE_CONFIG.DELETE_BRANCH.role],
+      renderChildren: (item: any) => (
+        <>
+          <ActionEditButton
+            role={PAGE_CONFIG.UPDATE_BRANCH.role}
+            onClick={() => onUpdateButtonClick(item.id)}
+          />
+          <ActionDeleteButton
+            role={PAGE_CONFIG.DELETE_BRANCH.role}
+            onClick={() => onDeleteButtonClick(item.id)}
+          />
+        </>
+      ),
+    }),
   ];
 
   const onDeleteButtonClick = (id: any) => {

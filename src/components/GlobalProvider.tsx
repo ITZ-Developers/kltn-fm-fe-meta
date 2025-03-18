@@ -24,6 +24,7 @@ const GlobalContext = createContext<{
   getRouters: () => any[];
   getSidebarMenus: () => any[];
   hasRoles: (role: string | string[]) => boolean;
+  hasAnyRoles: (role: string | string[]) => boolean;
 }>({
   authorities: [],
   imgSrc: null,
@@ -35,6 +36,7 @@ const GlobalContext = createContext<{
   getRouters: () => [],
   getSidebarMenus: () => [],
   hasRoles: () => false,
+  hasAnyRoles: () => false,
 });
 
 export const GlobalProvider = ({ children }: any) => {
@@ -79,6 +81,13 @@ export const GlobalProvider = ({ children }: any) => {
     return roles.every((role) => authorities.includes(role));
   };
 
+  const hasAnyRoles = (roles: string | string[]) => {
+    if (typeof roles === "string") {
+      return authorities.includes(roles);
+    }
+    return roles.some((role) => authorities.includes(role));
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -92,6 +101,7 @@ export const GlobalProvider = ({ children }: any) => {
         getRouters,
         getSidebarMenus,
         hasRoles,
+        hasAnyRoles,
       }}
     >
       {children}

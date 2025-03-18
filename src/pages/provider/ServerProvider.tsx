@@ -18,6 +18,7 @@ import InputBox from "../../components/page/InputBox";
 import { GridView } from "../../components/page/GridView";
 import MyToastContainer from "../../components/page/MyToastContainer";
 import { useLocation, useNavigate } from "react-router-dom";
+import { renderActionButton } from "../../components/ItemRender";
 
 const renderTenantCountField = (item: any) => {
   const percentage = (item.currentTenantCount / item.maxTenant) * 100;
@@ -95,25 +96,24 @@ const ServerProvider = () => {
       align: ALIGNMENT.LEFT,
       render: (item: any) => renderTenantCountField(item),
     },
-    {
-      label: "Hành động",
-      accessor: "action",
-      align: ALIGNMENT.CENTER,
-      render: (item: any) => {
-        return (
-          <span className="flex items-center text-center justify-center space-x-2">
-            <ActionEditButton
-              role={PAGE_CONFIG.UPDATE_SERVER_PROVIDER.role}
-              onClick={() => onUpdateButtonClick(item.id)}
-            />
-            <ActionDeleteButton
-              role={PAGE_CONFIG.DELETE_SERVER_PROVIDER.role}
-              onClick={() => onDeleteButtonClick(item.id)}
-            />
-          </span>
-        );
-      },
-    },
+    renderActionButton({
+      role: [
+        PAGE_CONFIG.UPDATE_SERVER_PROVIDER.role,
+        PAGE_CONFIG.DELETE_SERVER_PROVIDER.role,
+      ],
+      renderChildren: (item: any) => (
+        <>
+          <ActionEditButton
+            role={PAGE_CONFIG.UPDATE_SERVER_PROVIDER.role}
+            onClick={() => onUpdateButtonClick(item.id)}
+          />
+          <ActionDeleteButton
+            role={PAGE_CONFIG.DELETE_SERVER_PROVIDER.role}
+            onClick={() => onDeleteButtonClick(item.id)}
+          />
+        </>
+      ),
+    }),
   ];
 
   const onDeleteButtonClick = (id: any) => {
