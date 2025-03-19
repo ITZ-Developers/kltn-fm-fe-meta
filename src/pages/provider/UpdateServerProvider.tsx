@@ -110,6 +110,7 @@ const UpdateServerProvider = () => {
       activeItem={PAGE_CONFIG.SERVER_PROVIDER.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <FormCard
             title={PAGE_CONFIG.UPDATE_SERVER_PROVIDER.label}
             children={
@@ -206,7 +207,6 @@ const UpdateServerProvider = () => {
                   }
                 />
                 <MyToastContainer />
-                <LoadingDialog isVisible={loading} />
               </div>
             }
           />

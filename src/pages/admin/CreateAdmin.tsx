@@ -99,6 +99,7 @@ const CreateAdmin = () => {
       activeItem={PAGE_CONFIG.ADMIN.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <FormCard
             title={PAGE_CONFIG.CREATE_ADMIN.label}
             children={
@@ -208,7 +209,6 @@ const CreateAdmin = () => {
                   }
                 />
                 <MyToastContainer />
-                <LoadingDialog isVisible={loading} />
               </div>
             }
           />

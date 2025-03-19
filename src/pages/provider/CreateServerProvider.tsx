@@ -86,6 +86,7 @@ const CreateServerProvider = () => {
       activeItem={PAGE_CONFIG.SERVER_PROVIDER.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <FormCard
             title={PAGE_CONFIG.CREATE_SERVER_PROVIDER.label}
             children={
@@ -177,7 +178,6 @@ const CreateServerProvider = () => {
                   }
                 />
                 <MyToastContainer />
-                <LoadingDialog isVisible={loading} />
               </div>
             }
           />

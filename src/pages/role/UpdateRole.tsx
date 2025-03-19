@@ -57,9 +57,6 @@ const UpdateRole = () => {
           role.get(id),
           role.listPermissions({}),
         ]);
-
-        console.log(permissionData);
-
         if (res.result && permissionData.result) {
           const data = res.data;
           const groupedPermissions = permissionData.data.reduce(
@@ -125,6 +122,7 @@ const UpdateRole = () => {
       activeItem={PAGE_CONFIG.ROLE.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <FormCard
             title={PAGE_CONFIG.UPDATE_ROLE.label}
             children={
@@ -182,7 +180,6 @@ const UpdateRole = () => {
                   }
                 />
                 <MyToastContainer />
-                <LoadingDialog isVisible={loading} />
               </div>
             }
           />

@@ -129,6 +129,7 @@ const UpdateCustomer = () => {
       activeItem={PAGE_CONFIG.CUSTOMER.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <FormCard
             title={PAGE_CONFIG.UPDATE_CUSTOMER.label}
             children={
@@ -230,7 +231,6 @@ const UpdateCustomer = () => {
                   }
                 />
                 <MyToastContainer />
-                <LoadingDialog isVisible={loading} />
               </div>
             }
           />
