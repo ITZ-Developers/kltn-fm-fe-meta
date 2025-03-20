@@ -115,53 +115,55 @@ const MainHeader = ({ breadcrumbs }: any) => {
         isVisible={clearKeyFormVisible}
         formConfig={clearKeyFormConfig}
       />
-      <header className="flex items-center">
-        <div className="flex items-center justify-between w-full">
+      <header className="flex items-center justify-between w-full text-white">
+        <div className="flex-1 min-w-0">
           <Breadcrumb items={breadcrumbs} />
-          <div className="relative" ref={dropdownRef}>
-            <button
-              className="flex items-center space-x-2 focus:outline-none"
-              onClick={toggleDropdown}
-            >
-              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-700">
-                {profile?.avatarPath ? (
-                  <img
-                    src={getMediaImage(profile.avatarPath)}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <UserIcon size={20} className="text-white" />
-                )}
-              </div>
-              <span className="text-sm text-white">{profile.fullName}</span>
-            </button>
+        </div>
 
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-lg bg-gray-700 py-2 shadow-lg transition-opacity duration-200">
-                <OptionButton
-                  label={PAGE_CONFIG.PROFILE.label}
-                  onClick={() => handleClickButton(PAGE_CONFIG.PROFILE.path)}
+        <div className="relative flex-shrink-0" ref={dropdownRef}>
+          <button
+            className="flex items-center space-x-2 focus:outline-none"
+            onClick={toggleDropdown}
+          >
+            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-700">
+              {profile?.avatarPath ? (
+                <img
+                  src={getMediaImage(profile.avatarPath)}
+                  className="h-full w-full object-cover"
+                  alt="User avatar"
                 />
-                <OptionButton
-                  label={PAGE_CONFIG.CHANGE_PASSWORD.label}
-                  onClick={() =>
-                    handleClickButton(PAGE_CONFIG.CHANGE_PASSWORD.path)
-                  }
-                />
-                <OptionButton
-                  role={PAGE_CONFIG.INPUT_KEY.role}
-                  label={PAGE_CONFIG.INPUT_KEY.label}
-                  onClick={handleInputKey}
-                />
-                <OptionButton
-                  role={PAGE_CONFIG.CLEAR_KEY.role}
-                  label={PAGE_CONFIG.CLEAR_KEY.label}
-                  onClick={handleClearKey}
-                />
-                <OptionButton label="Đăng xuất" onClick={handleLogout} />
-              </div>
-            )}
-          </div>
+              ) : (
+                <UserIcon size={20} className="text-white" />
+              )}
+            </div>
+            <span className="text-sm hidden md:inline">{profile.fullName}</span>
+          </button>
+
+          {isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 rounded-lg bg-gray-900 py-2 shadow-lg transition-opacity duration-200 z-50">
+              <OptionButton
+                label={PAGE_CONFIG.PROFILE.label}
+                onClick={() => handleClickButton(PAGE_CONFIG.PROFILE.path)}
+              />
+              <OptionButton
+                label={PAGE_CONFIG.CHANGE_PASSWORD.label}
+                onClick={() =>
+                  handleClickButton(PAGE_CONFIG.CHANGE_PASSWORD.path)
+                }
+              />
+              <OptionButton
+                role={PAGE_CONFIG.INPUT_KEY.role}
+                label={PAGE_CONFIG.INPUT_KEY.label}
+                onClick={handleInputKey}
+              />
+              <OptionButton
+                role={PAGE_CONFIG.CLEAR_KEY.role}
+                label={PAGE_CONFIG.CLEAR_KEY.label}
+                onClick={handleClearKey}
+              />
+              <OptionButton label="Đăng xuất" onClick={handleLogout} />
+            </div>
+          )}
         </div>
       </header>
     </>

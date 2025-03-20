@@ -36,10 +36,29 @@ export const roleController = (fetchApi: any) => {
       authType: AUTH_TYPE.BEARER,
     });
 
+  const create = (payload: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: "/v1/group/create",
+      method: METHOD.POST,
+      payload,
+      authType: AUTH_TYPE.BEARER,
+    });
+
+  const del = (id: any) =>
+    fetchApi({
+      apiUrl: API_URL.MASTER_API,
+      endpoint: `/v1/group/delete/${id}`,
+      method: METHOD.DELETE,
+      authType: AUTH_TYPE.BEARER,
+    });
+
   return {
     list,
     get,
     update,
     listPermissions,
+    create,
+    del,
   };
 };

@@ -19,6 +19,7 @@ import CreateLocation from "../pages/location/CreateLocation";
 import UpdateLocation from "../pages/location/UpdateLocation";
 import CreateDbConfig from "../pages/dbConfig/CreateDbConfig";
 import UpdateDbConfig from "../pages/dbConfig/UpdateDbConfig";
+import CreateRole from "../pages/role/CreateRole";
 
 const ADMIN_CONFIG = {
   ADMIN: {
@@ -77,11 +78,20 @@ const ROLE_CONFIG = {
     element: <Role />,
   },
   UPDATE_ROLE: {
-    name: "update_role",
     label: "Cập nhật quyền hạn",
     path: "/role/update/:id",
     role: "GR_U",
     element: <UpdateRole />,
+  },
+  CREATE_ROLE: {
+    label: "Thêm mới quyền hạn",
+    path: "/role/create",
+    role: "GR_C",
+    element: <CreateRole />,
+  },
+  DELETE_ROLE: {
+    label: "Xóa quyền hạn",
+    role: "GR_D",
   },
 };
 

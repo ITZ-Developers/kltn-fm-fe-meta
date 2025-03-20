@@ -54,7 +54,7 @@ const renderEnum = ({
       return (
         <div className={`text-${align}`}>
           <span
-            className={`px-2 py-1 rounded-md font-semibold text-sm ${value.className}`}
+            className={`px-2 py-1 rounded-md font-semibold whitespace-nowrap text-sm ${value.className}`}
           >
             {value.label}
           </span>

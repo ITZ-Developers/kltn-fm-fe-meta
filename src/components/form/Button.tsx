@@ -83,7 +83,7 @@ const OptionButton = ({ label, onClick, role }: any) => {
 
   return (
     <button
-      className="flex w-full items-center px-4 py-2 text-left text-sm text-white hover:bg-gray-600"
+      className="flex w-full items-center px-4 py-2 text-left text-sm text-white hover:bg-gray-800"
       onClick={onClick}
     >
       {label}
