@@ -22,6 +22,7 @@ import {
   configDeleteDialog,
   configResetMfaDialog,
   ConfirmationDialog,
+  LoadingDialog,
 } from "../../components/page/Dialog";
 import useModal from "../../hooks/useModal";
 import { useGlobalContext } from "../../components/GlobalProvider";
@@ -31,8 +32,6 @@ import {
   ActionEditButton,
   ActionResetMfaButton,
 } from "../../components/form/Button";
-import MyToastContainer from "../../components/page/MyToastContainer";
-import { toast } from "react-toastify";
 
 const initQuery = {
   fullName: "",
@@ -45,10 +44,11 @@ const initQuery = {
 
 const Admin = () => {
   const { state } = useLocation();
-  const { profile } = useGlobalContext();
+  const { profile, setToast } = useGlobalContext();
   const { isModalVisible, showModal, hideModal, formConfig } = useModal();
   const navigate = useNavigate();
-  const { admin, role } = useApi();
+  const { admin, loading } = useApi();
+  const { admin: adminList, role } = useApi();
   const {
     data,
     query,
@@ -57,7 +57,7 @@ const Admin = () => {
     handlePageChange,
     handleSubmitQuery,
   } = useGridView({
-    fetchListApi: admin.list,
+    fetchListApi: adminList.list,
     initQuery: state?.query || initQuery,
   });
 
@@ -120,7 +120,7 @@ const Admin = () => {
         resetApi: () => admin.resetMfa(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal,
-        toast,
+        setToast,
       })
     );
   };
@@ -132,7 +132,7 @@ const Admin = () => {
         deleteApi: () => admin.del(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal,
-        toast,
+        setToast,
       })
     );
   };
@@ -147,6 +147,7 @@ const Admin = () => {
       activeItem={PAGE_CONFIG.ADMIN.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <ToolBar
             searchBoxes={
               <>
@@ -197,7 +198,6 @@ const Admin = () => {
             onPageChange={handlePageChange}
             totalPages={totalPages}
           />
-          <MyToastContainer />
           <ConfirmationDialog
             isVisible={isModalVisible}
             formConfig={formConfig}

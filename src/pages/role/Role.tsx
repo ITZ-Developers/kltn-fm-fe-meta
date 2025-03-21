@@ -7,7 +7,7 @@ import {
   renderEnum,
 } from "../../components/ItemRender";
 import { PAGE_CONFIG } from "../../components/PageConfig";
-import { ToolBar } from "../../components/page/ToolBar";
+import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import InputBox from "../../components/page/InputBox";
 import {
   ALIGNMENT,
@@ -16,17 +16,30 @@ import {
   TRUNCATE_LENGTH,
 } from "../../services/constant";
 import { useGridView } from "../../hooks/useGridView";
-import { ActionEditButton } from "../../components/form/Button";
+import {
+  ActionDeleteButton,
+  ActionEditButton,
+} from "../../components/form/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { convertUtcToVn, truncateString } from "../../services/utils";
 import { StaticSelectBox } from "../../components/page/SelectBox";
+import useModal from "../../hooks/useModal";
+import {
+  configDeleteDialog,
+  ConfirmationDialog,
+  LoadingDialog,
+} from "../../components/page/Dialog";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const initQuery = { name: "", kind: "", page: 0, size: ITEMS_PER_PAGE };
 
 const Role = () => {
+  const { setToast } = useGlobalContext();
+  const { showModal, hideModal, isModalVisible, formConfig } = useModal();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { role } = useApi();
+  const { role, loading } = useApi();
+  const { role: roleForList } = useApi();
   const {
     data,
     query,
@@ -35,7 +48,7 @@ const Role = () => {
     handlePageChange,
     handleSubmitQuery,
   } = useGridView({
-    fetchListApi: role.list,
+    fetchListApi: roleForList.list,
     initQuery: state?.query || initQuery,
   });
 
@@ -73,7 +86,7 @@ const Role = () => {
       dataMap: GROUP_KIND_MAP,
     }),
     renderActionButton({
-      role: [PAGE_CONFIG.UPDATE_ROLE.role],
+      role: [PAGE_CONFIG.UPDATE_ROLE.role, PAGE_CONFIG.DELETE_ROLE.role],
       renderChildren: (item: any) => (
         <>
           <ActionEditButton
@@ -82,10 +95,32 @@ const Role = () => {
               navigate(`/role/update/${item.id}`, { state: { query } })
             }
           />
+          {item.kind == GROUP_KIND_MAP.ADMIN.value && (
+            <ActionDeleteButton
+              role={PAGE_CONFIG.DELETE_ROLE.role}
+              onClick={() => onDeleteButtonClick(item.id)}
+            />
+          )}
         </>
       ),
     }),
   ];
+
+  const onCreateButtonClick = () => {
+    navigate(PAGE_CONFIG.CREATE_ROLE.path, { state: { query } });
+  };
+
+  const onDeleteButtonClick = (id: any) => {
+    showModal(
+      configDeleteDialog({
+        label: PAGE_CONFIG.DELETE_ROLE.label,
+        deleteApi: () => role.del(id),
+        refreshData: () => handleSubmitQuery(query),
+        hideModal,
+        setToast,
+      })
+    );
+  };
 
   return (
     <Sidebar
@@ -97,6 +132,7 @@ const Role = () => {
       activeItem={PAGE_CONFIG.ROLE.name}
       renderContent={
         <>
+          <LoadingDialog isVisible={loading} />
           <ToolBar
             searchBoxes={
               <>
@@ -117,6 +153,12 @@ const Role = () => {
                 />
               </>
             }
+            actionButtons={
+              <CreateButton
+                role={PAGE_CONFIG.CREATE_ROLE.role}
+                onClick={onCreateButtonClick}
+              />
+            }
             onSearch={async () => await handleSubmitQuery(query)}
             onClear={async () => await handleSubmitQuery(initQuery)}
           />
@@ -127,6 +169,10 @@ const Role = () => {
             itemsPerPage={ITEMS_PER_PAGE}
             onPageChange={handlePageChange}
             totalPages={totalPages}
+          />
+          <ConfirmationDialog
+            isVisible={isModalVisible}
+            formConfig={formConfig}
           />
         </>
       }

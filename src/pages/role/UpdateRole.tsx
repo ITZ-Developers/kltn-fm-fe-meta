@@ -1,13 +1,11 @@
 import { useParams } from "react-router-dom";
 import { LoadingDialog } from "../../components/page/Dialog";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
-import { BASIC_MESSAGES, BUTTON_TEXT } from "../../services/constant";
+import { BASIC_MESSAGES, BUTTON_TEXT, TOAST } from "../../services/constant";
 import useApi from "../../hooks/useApi";
 import useForm from "../../hooks/useForm";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import useQueryState from "../../hooks/useQueryState";
 import Sidebar from "../../components/page/Sidebar";
@@ -16,11 +14,14 @@ import {
   InputField,
   TextAreaField,
 } from "../../components/form/InputField";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const UpdateRole = () => {
+  const { setToast } = useGlobalContext();
   const { id } = useParams();
   const { handleNavigateBack } = useQueryState({ path: PAGE_CONFIG.ROLE.path });
   const { role, loading } = useApi();
+  const { role: permission } = useApi();
   const [groupPermissions, setGroupPermissions] = useState<any>(null);
 
   const validate = (form: any) => {
@@ -53,31 +54,39 @@ const UpdateRole = () => {
     const fetchData = async () => {
       resetForm();
       try {
-        const [res, permissionData] = await Promise.all([
-          role.get(id),
-          role.listPermissions({}),
-        ]);
-        if (res.result && permissionData.result) {
-          const data = res.data;
-          const groupedPermissions = permissionData.data.reduce(
-            (acc: any, perm: any) => {
-              if (!acc[perm.nameGroup]) acc[perm.nameGroup] = [];
-              acc[perm.nameGroup].push(perm);
-              return acc;
-            },
-            {}
-          );
-          setGroupPermissions(groupedPermissions);
-          setForm({
-            name: data.name,
-            description: data.description,
-            permissionIds: data.permissions
-              ? data.permissions.map((p: any) => p.id)
-              : [],
-          });
-        } else {
+        const res = await role.get(id);
+        if (!res.result) {
           handleNavigateBack();
+          return;
         }
+
+        const permissionData = await permission.listPermissions({
+          kind: res.data.kind,
+        });
+
+        if (!permissionData.result) {
+          handleNavigateBack();
+          return;
+        }
+
+        const data = res.data;
+        const groupedPermissions = permissionData?.data.reduce(
+          (acc: any, perm: any) => {
+            if (!acc[perm.nameGroup]) acc[perm.nameGroup] = [];
+            acc[perm.nameGroup].push(perm);
+            return acc;
+          },
+          {}
+        );
+
+        setGroupPermissions(groupedPermissions);
+        setForm({
+          name: data.name,
+          description: data.description,
+          permissionIds: data.permissions
+            ? data.permissions.map((p: any) => p.id)
+            : [],
+        });
       } catch (error) {
         handleNavigateBack();
       }
@@ -99,12 +108,13 @@ const UpdateRole = () => {
     if (isValidForm()) {
       const res = await role.update({ id, ...form });
       if (res.result) {
+        setToast(BASIC_MESSAGES.UPDATED, TOAST.SUCCESS);
         handleNavigateBack();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -179,7 +189,6 @@ const UpdateRole = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

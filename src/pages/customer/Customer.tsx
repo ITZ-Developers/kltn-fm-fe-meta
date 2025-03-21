@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import {
   ActionDeleteButton,
   ActionEditButton,
@@ -8,6 +7,7 @@ import {
   configDeleteDialog,
   configResetMfaDialog,
   ConfirmationDialog,
+  LoadingDialog,
 } from "../../components/page/Dialog";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import useApi from "../../hooks/useApi";
@@ -22,7 +22,6 @@ import {
 import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import { GridView } from "../../components/page/GridView";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SelectBox, StaticSelectBox } from "../../components/page/SelectBox";
 import {
@@ -31,6 +30,7 @@ import {
   renderHrefLink,
   renderImage,
 } from "../../components/ItemRender";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const initQuery = {
   accountId: "",
@@ -41,6 +41,7 @@ const initQuery = {
 };
 
 const Customer = () => {
+  const { setToast } = useGlobalContext();
   const { state } = useLocation();
   const navigate = useNavigate();
   const {
@@ -49,7 +50,8 @@ const Customer = () => {
     hideModal: hideDeleteDialog,
     formConfig: deleteDialogConfig,
   } = useModal();
-  const { customer, admin, branch } = useApi();
+  const { customer, loading } = useApi();
+  const { customer: customerList, admin, branch } = useApi();
   const {
     data,
     query,
@@ -58,7 +60,7 @@ const Customer = () => {
     handlePageChange,
     handleSubmitQuery,
   } = useGridView({
-    fetchListApi: customer.list,
+    fetchListApi: customerList.list,
     initQuery: state?.query || initQuery,
   });
 
@@ -120,7 +122,7 @@ const Customer = () => {
         resetApi: () => admin.resetMfa(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideDeleteDialog,
-        toast,
+        setToast,
       })
     );
   };
@@ -132,7 +134,7 @@ const Customer = () => {
         deleteApi: () => customer.del(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideDeleteDialog,
-        toast,
+        setToast,
       })
     );
   };
@@ -155,7 +157,7 @@ const Customer = () => {
       activeItem={PAGE_CONFIG.CUSTOMER.name}
       renderContent={
         <>
-          <MyToastContainer />
+          <LoadingDialog isVisible={loading} />
           <ToolBar
             searchBoxes={
               <>

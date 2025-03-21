@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { ActionDeleteButton } from "../../components/form/Button";
 import {
   configDeleteDialog,
@@ -19,7 +18,6 @@ import {
 import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import { GridView } from "../../components/page/GridView";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { useParams } from "react-router-dom";
 import useQueryState from "../../hooks/useQueryState";
 import { SelectBox } from "../../components/page/SelectBox";
@@ -27,8 +25,10 @@ import CreateAccountBranch from "./CreateAccountBranch";
 import { useEffect, useState } from "react";
 import { basicRender, renderActionButton } from "../../components/ItemRender";
 import { truncateString } from "../../services/utils";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const AccountBranch = () => {
+  const { setToast } = useGlobalContext();
   const { adminId } = useParams();
   const initQuery = {
     accountId: adminId,
@@ -121,7 +121,7 @@ const AccountBranch = () => {
         deleteApi: () => accountBranch.del(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideDeleteDialog,
-        toast,
+        setToast,
       })
     );
   };
@@ -133,7 +133,7 @@ const AccountBranch = () => {
         fetchApi: accountBranch.create,
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideCreateForm,
-        toast,
+        setToast,
         successMessage: BASIC_MESSAGES.CREATED,
         initForm: {
           accountId: adminId,
@@ -157,7 +157,6 @@ const AccountBranch = () => {
       activeItem={PAGE_CONFIG.ADMIN.name}
       renderContent={
         <>
-          <MyToastContainer />
           <LoadingDialog isVisible={loading} />
           <ToolBar
             searchBoxes={

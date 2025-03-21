@@ -8,17 +8,18 @@ import useApi from "../../hooks/useApi";
 import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
-import { toast } from "react-toastify";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
 import useQueryState from "../../hooks/useQueryState";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { extractHostAndPort } from "../../services/utils";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const UpdateServerProvider = () => {
+  const { setToast } = useGlobalContext();
   const { id } = useParams();
   const { handleNavigateBack } = useQueryState({
     path: PAGE_CONFIG.SERVER_PROVIDER.path,
@@ -87,12 +88,13 @@ const UpdateServerProvider = () => {
     if (isValidForm()) {
       const res = await serverProvider.update({ id, ...form });
       if (res.result) {
+        setToast(BASIC_MESSAGES.UPDATED, TOAST.SUCCESS);
         handleNavigateBack();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -206,7 +208,6 @@ const UpdateServerProvider = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

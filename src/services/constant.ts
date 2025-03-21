@@ -92,6 +92,12 @@ const FILE_TYPES = {
   DOCUMENT: "DOCUMENT",
 };
 
+const TOAST = {
+  SUCCESS: "success",
+  ERROR: "error",
+  WARN: "warning",
+};
+
 const BASIC_MESSAGES = {
   INVALID_FORM: "Vui lòng kiểm tra lại thông tin",
   VERIFY_FAILED: "Xác thực thất bại",
@@ -136,4 +142,5 @@ export {
   BUTTON_TEXT,
   FETCH_INTERVAL,
   TRUNCATE_LENGTH,
+  TOAST,
 };

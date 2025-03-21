@@ -7,11 +7,12 @@ import {
   useEffect,
 } from "react";
 import banner from "../assets/cms.png";
-import { LOCAL_STORAGE } from "../services/constant";
+import { LOCAL_STORAGE, TOAST } from "../services/constant";
 import { getStorageData, setStorageData } from "../services/storages";
 import { PAGE_CONFIG, SIDEBAR_MENUS } from "./PageConfig";
 import { jwtDecode } from "jwt-decode";
 import { getRoles } from "../services/utils";
+import { toast } from "react-toastify";
 
 const GlobalContext = createContext<{
   authorities: any;
@@ -25,6 +26,7 @@ const GlobalContext = createContext<{
   getSidebarMenus: () => any[];
   hasRoles: (role: string | string[]) => boolean;
   hasAnyRoles: (role: string | string[]) => boolean;
+  setToast: (msg: string | null, type?: any) => void;
 }>({
   authorities: [],
   imgSrc: null,
@@ -37,6 +39,7 @@ const GlobalContext = createContext<{
   getSidebarMenus: () => [],
   hasRoles: () => false,
   hasAnyRoles: () => false,
+  setToast: () => {},
 });
 
 export const GlobalProvider = ({ children }: any) => {
@@ -88,6 +91,26 @@ export const GlobalProvider = ({ children }: any) => {
     return roles.some((role) => authorities.includes(role));
   };
 
+  const setToast = (
+    msg: string | null,
+    type: "success" | "error" | "warn" = "success"
+  ) => {
+    if (!msg) return;
+    switch (type) {
+      case TOAST.SUCCESS:
+        toast.success(msg);
+        break;
+      case TOAST.ERROR:
+        toast.error(msg);
+        break;
+      case TOAST.WARN:
+        toast.warn(msg);
+        break;
+      default:
+        toast.info(msg);
+    }
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -102,6 +125,7 @@ export const GlobalProvider = ({ children }: any) => {
         getSidebarMenus,
         hasRoles,
         hasAnyRoles,
+        setToast,
       }}
     >
       {children}

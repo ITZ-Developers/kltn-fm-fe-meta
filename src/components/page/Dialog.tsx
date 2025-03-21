@@ -1,4 +1,4 @@
-import { BASIC_MESSAGES, BUTTON_TEXT } from "../../services/constant";
+import { BASIC_MESSAGES, BUTTON_TEXT, TOAST } from "../../services/constant";
 import { CancelButton, SubmitButton } from "../form/Button";
 
 const ModalForm = ({ children, isVisible, color, title, message }: any) => {
@@ -107,7 +107,7 @@ const configResetMfaDialog = ({
   resetApi,
   refreshData,
   hideModal,
-  toast,
+  setToast,
 }: any) => {
   return {
     title: label,
@@ -117,10 +117,10 @@ const configResetMfaDialog = ({
       hideModal();
       const res = await resetApi();
       if (res.result) {
-        toast.success(BASIC_MESSAGES.RESETED);
+        setToast(BASIC_MESSAGES.RESETED, TOAST.SUCCESS);
         await refreshData();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message, TOAST.ERROR);
       }
     },
     confirmText: BUTTON_TEXT.SUBMIT,
@@ -133,7 +133,7 @@ const configDeleteDialog = ({
   deleteApi,
   refreshData,
   hideModal,
-  toast,
+  setToast,
 }: any) => {
   return {
     title: label,
@@ -143,10 +143,10 @@ const configDeleteDialog = ({
       hideModal();
       const res = await deleteApi();
       if (res.result) {
-        toast.success(BASIC_MESSAGES.DELETED);
+        setToast(BASIC_MESSAGES.DELETED, TOAST.SUCCESS);
         await refreshData();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message, TOAST.ERROR);
       }
     },
     confirmText: BUTTON_TEXT.DELETE,
@@ -159,8 +159,8 @@ const configModalForm = ({
   fetchApi,
   refreshData,
   hideModal,
+  setToast,
   successMessage = BASIC_MESSAGES.SUCCESS,
-  toast,
   initForm,
 }: any) => {
   return {
@@ -169,12 +169,12 @@ const configModalForm = ({
       const res = await fetchApi(form);
       if (res.result) {
         hideModal();
-        toast.success(successMessage);
+        setToast(successMessage, TOAST.SUCCESS);
         if (refreshData) {
           await refreshData();
         }
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message, TOAST.ERROR);
       }
     },
     hideModal,

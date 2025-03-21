@@ -1,19 +1,20 @@
 import useForm from "../../hooks/useForm";
-import { toast } from "react-toastify";
 import { InputField } from "../../components/form/InputField";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import { LoadingDialog } from "../../components/page/Dialog";
 import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import useApi from "../../hooks/useApi";
 import { ActionSection, BasicCardForm } from "../../components/form/FormCard";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const ForgotPassword = () => {
+  const { setToast } = useGlobalContext();
   const navigate = useNavigate();
   const { auth, loading } = useApi();
 
@@ -34,20 +35,19 @@ const ForgotPassword = () => {
     if (isValidForm()) {
       const res = await auth.requestForgetPassword(form.email);
       if (res.result) {
-        toast.success(BASIC_MESSAGES.SUCCESS);
+        setToast(BASIC_MESSAGES.SUCCESS, TOAST.SUCCESS);
         navigate("/reset-password", { state: { userId: res.data.userId } });
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
   return (
     <>
       <LoadingDialog isVisible={loading} />
-      <MyToastContainer />
       <BasicCardForm title="Quên mật khẩu">
         <div className="space-y-4">
           <InputField

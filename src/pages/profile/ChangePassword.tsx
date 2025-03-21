@@ -4,18 +4,19 @@ import useForm from "../../hooks/useForm";
 import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
-import { toast } from "react-toastify";
 import Sidebar from "../../components/page/Sidebar";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
 import { InputField } from "../../components/form/InputField";
 import { SubmitButton } from "../../components/form/Button";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const ChangePassword = () => {
+  const { setToast } = useGlobalContext();
   const { auth, loading } = useApi();
 
   const validate = (form: any) => {
@@ -43,16 +44,16 @@ const ChangePassword = () => {
 
   const handleSubmit = async () => {
     if (!isValidForm()) {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
       return;
     }
     const res = await auth.changePassword(form);
     if (!res.result) {
-      toast.error(res.message);
+      setToast(res.message, TOAST.ERROR);
       return;
     }
     resetForm();
-    toast.success(BASIC_MESSAGES.UPDATED);
+    setToast(BASIC_MESSAGES.UPDATED);
   };
 
   return (
@@ -117,7 +118,6 @@ const ChangePassword = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

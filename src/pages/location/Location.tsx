@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import {
   ActionDeleteButton,
   ActionEditButton,
@@ -6,6 +5,7 @@ import {
 import {
   configDeleteDialog,
   ConfirmationDialog,
+  LoadingDialog,
 } from "../../components/page/Dialog";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import useApi from "../../hooks/useApi";
@@ -20,7 +20,6 @@ import {
 import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import { ActionButton, GridView } from "../../components/page/GridView";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useQueryState from "../../hooks/useQueryState";
 import { useEffect, useState } from "react";
@@ -38,6 +37,7 @@ import {
   truncateToDDMMYYYY,
 } from "../../services/utils";
 import { StaticSelectBox } from "../../components/page/SelectBox";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const renderExpiredDateField = (item: any) => {
   const expiredDate = parseDate(item.expiredDate);
@@ -98,6 +98,7 @@ const renderNameField = (item: any) => {
 };
 
 const Location = () => {
+  const { setToast } = useGlobalContext();
   const { customerId } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -117,7 +118,8 @@ const Location = () => {
     hideModal: hideDeleteDialog,
     formConfig: deleteDialogConfig,
   } = useModal();
-  const { location, customer } = useApi();
+  const { location, loading } = useApi();
+  const { location: locationList, customer } = useApi();
   const {
     data,
     query,
@@ -126,7 +128,7 @@ const Location = () => {
     handlePageChange,
     handleSubmitQuery,
   } = useGridView({
-    fetchListApi: location.list,
+    fetchListApi: locationList.list,
     initQuery: state?.query ? { ...state.query, customerId } : initQuery,
   });
   const [customerData, setCustomerData] = useState<any>(null);
@@ -248,7 +250,7 @@ const Location = () => {
         deleteApi: () => location.del(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideDeleteDialog,
-        toast,
+        setToast,
       })
     );
   };
@@ -267,7 +269,7 @@ const Location = () => {
       activeItem={PAGE_CONFIG.CUSTOMER.name}
       renderContent={
         <>
-          <MyToastContainer />
+          <LoadingDialog isVisible={loading} />
           <ToolBar
             searchBoxes={
               <>

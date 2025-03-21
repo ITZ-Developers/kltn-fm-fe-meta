@@ -14,14 +14,15 @@ import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
   STATUS_MAP,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
-import { toast } from "react-toastify";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
 import useQueryState from "../../hooks/useQueryState";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const CreateCustomer = () => {
+  const { setToast } = useGlobalContext();
   const { handleNavigateBack } = useQueryState({
     path: PAGE_CONFIG.CUSTOMER.path,
   });
@@ -75,12 +76,13 @@ const CreateCustomer = () => {
     if (isValidForm()) {
       const res = await customer.create(form);
       if (res.result) {
+        setToast(BASIC_MESSAGES.CREATED, TOAST.SUCCESS);
         handleNavigateBack();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -204,7 +206,6 @@ const CreateCustomer = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

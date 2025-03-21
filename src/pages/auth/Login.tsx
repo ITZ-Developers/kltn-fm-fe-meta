@@ -1,5 +1,4 @@
 import useForm from "../../hooks/useForm";
-import { toast } from "react-toastify";
 import { InputField } from "../../components/form/InputField";
 import {
   Button,
@@ -12,9 +11,9 @@ import {
   BUTTON_TEXT,
   GRANT_TYPE,
   LOCAL_STORAGE,
+  TOAST,
 } from "../../services/constant";
 import { setStorageData } from "../../services/storages";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import useApi from "../../hooks/useApi";
 import { useState } from "react";
 import {
@@ -24,8 +23,10 @@ import {
   ImageBase64,
 } from "../../components/form/FormCard";
 import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const Login = () => {
+  const { setToast } = useGlobalContext();
   const navigate = useNavigate();
   const { auth, loading } = useApi();
   const [isMfa, setIsMfa] = useState(false);
@@ -60,11 +61,11 @@ const Login = () => {
       grant_type: GRANT_TYPE.PASSWORD,
     });
     if (res?.access_token) {
-      toast.success(BASIC_MESSAGES.LOGGED_IN);
+      setToast(BASIC_MESSAGES.LOGGED_IN, TOAST.SUCCESS);
       setStorageData(LOCAL_STORAGE.ACCESS_TOKEN, res?.access_token);
       window.location.href = "/";
     } else {
-      toast.error(BASIC_MESSAGES.LOG_IN_FAILED);
+      setToast(BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
     }
   };
 
@@ -75,7 +76,7 @@ const Login = () => {
         password: form.password,
       });
       if (!verify?.result) {
-        toast.error(BASIC_MESSAGES.LOG_IN_FAILED);
+        setToast(BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
         return;
       }
       const data = verify.data;
@@ -88,7 +89,7 @@ const Login = () => {
         }
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -101,14 +102,14 @@ const Login = () => {
         grant_type: GRANT_TYPE.PASSWORD,
       });
       if (res?.access_token) {
-        toast.success(BASIC_MESSAGES.LOGGED_IN);
+        setToast(BASIC_MESSAGES.LOGGED_IN, TOAST.SUCCESS);
         setStorageData(LOCAL_STORAGE.ACCESS_TOKEN, res?.access_token);
         window.location.href = "/";
       } else {
-        toast.error(BASIC_MESSAGES.VERIFY_FAILED);
+        setToast(BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -121,7 +122,6 @@ const Login = () => {
   return (
     <>
       <LoadingDialog isVisible={loading} />
-      <MyToastContainer />
       {!isMfa ? (
         <BasicCardForm title={BUTTON_TEXT.LOGIN}>
           <div className="space-y-4">

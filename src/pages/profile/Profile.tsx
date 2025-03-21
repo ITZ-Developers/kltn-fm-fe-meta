@@ -1,15 +1,14 @@
-import { toast } from "react-toastify";
-import { CancelButton, SubmitButton } from "../../components/form/Button";
+import { SubmitButton } from "../../components/form/Button";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
 import { InputField } from "../../components/form/InputField";
 import { ImageUploadField } from "../../components/form/OtherField";
 import { LoadingDialog } from "../../components/page/Dialog";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import Sidebar from "../../components/page/Sidebar";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
 import { useEffect } from "react";
@@ -18,7 +17,7 @@ import useForm from "../../hooks/useForm";
 import { useGlobalContext } from "../../components/GlobalProvider";
 
 const Profile = () => {
-  const { setProfile } = useGlobalContext();
+  const { setProfile, setToast } = useGlobalContext();
   const { auth, loading } = useApi();
 
   const validate = (form: any) => {
@@ -60,20 +59,20 @@ const Profile = () => {
 
   const handleSubmit = async () => {
     if (!isValidForm()) {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
       return;
     }
     const res = await auth.updateProfile(form);
     if (!res.result) {
-      toast.error(res.message);
+      setToast(res.message, TOAST.ERROR);
       return;
     }
     const profile = await auth.profile();
     if (profile.result) {
       setProfile(profile.data);
-      toast.success(BASIC_MESSAGES.UPDATED);
+      setToast(BASIC_MESSAGES.UPDATED, TOAST.SUCCESS);
     } else {
-      toast.error(profile.message);
+      setToast(profile.message, TOAST.ERROR);
     }
   };
 
@@ -157,7 +156,6 @@ const Profile = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

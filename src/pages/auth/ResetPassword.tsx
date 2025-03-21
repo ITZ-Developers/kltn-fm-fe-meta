@@ -1,5 +1,4 @@
 import useForm from "../../hooks/useForm";
-import { toast } from "react-toastify";
 import { InputField } from "../../components/form/InputField";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import {
@@ -9,9 +8,9 @@ import {
 import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import useApi from "../../hooks/useApi";
 import {
   ActionSection,
@@ -21,8 +20,10 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useModal from "../../hooks/useModal";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const ResetPassword = () => {
+  const { setToast } = useGlobalContext();
   const { state } = useLocation();
   const navigate = useNavigate();
   const { auth, loading } = useApi();
@@ -57,7 +58,7 @@ const ResetPassword = () => {
     if (isValidForm()) {
       const res = await auth.resetPassword({ userId: state.userId, ...form });
       if (res.result) {
-        toast.success(BASIC_MESSAGES.SUCCESS);
+        setToast(BASIC_MESSAGES.SUCCESS, TOAST.SUCCESS);
         showModal({
           title: "Thành công",
           message: "Đặt lại mật khẩu thành công",
@@ -67,17 +68,16 @@ const ResetPassword = () => {
           onCancel: () => navigate("/"),
         });
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
   return (
     <>
       <LoadingDialog isVisible={loading} />
-      <MyToastContainer />
       <BasicCardForm title="Đặt lại mật khẩu">
         <div className="space-y-4">
           <InputField

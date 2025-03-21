@@ -1,13 +1,14 @@
-import { toast } from "react-toastify";
 import { ActionSection, ModalForm } from "../../components/form/FormCard";
 import useForm from "../../hooks/useForm";
 import { useEffect } from "react";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
-import { BASIC_MESSAGES, BUTTON_TEXT } from "../../services/constant";
+import { BASIC_MESSAGES, BUTTON_TEXT, TOAST } from "../../services/constant";
 import { SelectField } from "../../components/form/SelectField";
 import useApi from "../../hooks/useApi";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const CreateAccountBranch = ({ isVisible, formConfig }: any) => {
+  const { setToast } = useGlobalContext();
   const { branch } = useApi();
   const validate = (form: any) => {
     const newErrors: any = {};
@@ -30,7 +31,7 @@ const CreateAccountBranch = ({ isVisible, formConfig }: any) => {
     if (isValidForm()) {
       await formConfig.onButtonClick(form);
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 

@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import {
   ActionDeleteButton,
   ActionEditButton,
@@ -23,11 +22,11 @@ import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import InputBox from "../../components/page/InputBox";
 import { GridView } from "../../components/page/GridView";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import CreateBranch from "./CreateBranch";
 import UpdateBranch from "./UpdateBranch";
 import { basicRender, renderActionButton } from "../../components/ItemRender";
 import { truncateString } from "../../services/utils";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const initQuery = {
   name: "",
@@ -36,6 +35,7 @@ const initQuery = {
 };
 
 const Branch = () => {
+  const { setToast } = useGlobalContext();
   const {
     isModalVisible: createFormVisible,
     showModal: showCreateForm,
@@ -109,7 +109,7 @@ const Branch = () => {
         deleteApi: () => branch.del(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideDeleteDialog,
-        toast,
+        setToast,
       })
     );
   };
@@ -121,7 +121,7 @@ const Branch = () => {
         fetchApi: branch.create,
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideCreateForm,
-        toast,
+        setToast,
         successMessage: BASIC_MESSAGES.CREATED,
         initForm: {
           name: "",
@@ -137,7 +137,7 @@ const Branch = () => {
         fetchApi: branch.update,
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideUpdateForm,
-        toast,
+        setToast,
         successMessage: BASIC_MESSAGES.UPDATED,
         initForm: {
           id,
@@ -157,7 +157,6 @@ const Branch = () => {
       activeItem={PAGE_CONFIG.BRANCH.name}
       renderContent={
         <>
-          <MyToastContainer />
           <LoadingDialog isVisible={loading} />
           <ToolBar
             searchBoxes={

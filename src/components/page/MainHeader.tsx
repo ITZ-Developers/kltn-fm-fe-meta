@@ -12,9 +12,9 @@ import { OptionButton } from "../form/Button";
 import InputKey from "../../pages/auth/InputKey";
 import ClearKey from "../../pages/auth/ClearKey";
 import useApi from "../../hooks/useApi";
-import { toast } from "react-toastify";
 
 const MainHeader = ({ breadcrumbs }: any) => {
+  const { setToast } = useGlobalContext();
   const { auth, loading } = useApi();
   const { profile } = useGlobalContext();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -80,7 +80,7 @@ const MainHeader = ({ breadcrumbs }: any) => {
         label: PAGE_CONFIG.INPUT_KEY.label,
         fetchApi: auth.inputKey,
         hideModal: hideInputKeyForm,
-        toast,
+        setToast,
         initForm: { privateKey: "" },
       })
     );
@@ -93,7 +93,7 @@ const MainHeader = ({ breadcrumbs }: any) => {
         label: PAGE_CONFIG.CLEAR_KEY.label,
         fetchApi: auth.clearKey,
         hideModal: hideClearKeyForm,
-        toast,
+        setToast,
         initForm: { password: "" },
       })
     );

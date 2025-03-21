@@ -5,11 +5,11 @@ import {
   BUTTON_TEXT,
   GROUP_KIND_MAP,
   STATUS_MAP,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
 import useForm from "../../hooks/useForm";
 import { PAGE_CONFIG } from "../../components/PageConfig";
-import { toast } from "react-toastify";
 import Sidebar from "../../components/page/Sidebar";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
 import { ImageUploadField } from "../../components/form/OtherField";
@@ -19,13 +19,14 @@ import {
   StaticSelectField,
 } from "../../components/form/SelectField";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
 import { useEffect, useState } from "react";
 import useQueryState from "../../hooks/useQueryState";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const UpdateAdmin = () => {
   const { id } = useParams();
+  const { setToast } = useGlobalContext();
   const { handleNavigateBack } = useQueryState({
     path: PAGE_CONFIG.ADMIN.path,
   });
@@ -110,12 +111,13 @@ const UpdateAdmin = () => {
     if (isValidForm()) {
       const res = await admin.update({ id, ...form });
       if (res.result) {
+        setToast(BASIC_MESSAGES.UPDATED, TOAST.SUCCESS);
         handleNavigateBack();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -240,7 +242,6 @@ const UpdateAdmin = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

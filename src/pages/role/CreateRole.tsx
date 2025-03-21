@@ -1,17 +1,15 @@
-import { useParams } from "react-router-dom";
 import { LoadingDialog } from "../../components/page/Dialog";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
 import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
   GROUP_KIND_MAP,
+  TOAST,
 } from "../../services/constant";
 import useApi from "../../hooks/useApi";
 import useForm from "../../hooks/useForm";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import useQueryState from "../../hooks/useQueryState";
 import Sidebar from "../../components/page/Sidebar";
@@ -20,9 +18,13 @@ import {
   InputField,
   TextAreaField,
 } from "../../components/form/InputField";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const CreateRole = () => {
-  const { handleNavigateBack } = useQueryState({ path: PAGE_CONFIG.ROLE.path });
+  const { setToast } = useGlobalContext();
+  const { handleNavigateBack } = useQueryState({
+    path: PAGE_CONFIG.ROLE.path,
+  });
   const { role, loading } = useApi();
   const [groupPermissions, setGroupPermissions] = useState<any>(null);
 
@@ -88,12 +90,13 @@ const CreateRole = () => {
     if (isValidForm()) {
       const res = await role.create(form);
       if (res.result) {
+        setToast(BASIC_MESSAGES.CREATED, TOAST.SUCCESS);
         handleNavigateBack();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -168,7 +171,6 @@ const CreateRole = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

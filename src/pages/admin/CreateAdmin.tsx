@@ -15,14 +15,15 @@ import {
   BUTTON_TEXT,
   GROUP_KIND_MAP,
   STATUS_MAP,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
-import { toast } from "react-toastify";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
 import useQueryState from "../../hooks/useQueryState";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const CreateAdmin = () => {
+  const { setToast } = useGlobalContext();
   const { handleNavigateBack } = useQueryState({
     path: PAGE_CONFIG.ADMIN.path,
   });
@@ -76,12 +77,13 @@ const CreateAdmin = () => {
     if (isValidForm()) {
       const res = await admin.create(form);
       if (res.result) {
+        setToast(BASIC_MESSAGES.CREATED, TOAST.SUCCESS);
         handleNavigateBack();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -208,7 +210,6 @@ const CreateAdmin = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

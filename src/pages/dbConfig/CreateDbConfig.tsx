@@ -5,16 +5,16 @@ import useForm from "../../hooks/useForm";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
 import useApi from "../../hooks/useApi";
-import { BASIC_MESSAGES, BUTTON_TEXT } from "../../services/constant";
-import { toast } from "react-toastify";
-import MyToastContainer from "../../components/page/MyToastContainer";
+import { BASIC_MESSAGES, BUTTON_TEXT, TOAST } from "../../services/constant";
 import useQueryState from "../../hooks/useQueryState";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { SelectField } from "../../components/form/SelectField";
 import { LoadingDialog } from "../../components/page/Dialog";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const CreateDbConfig = () => {
+  const { setToast } = useGlobalContext();
   const { customerId, locationId } = useParams();
   const { handleNavigateBack: backLocation } = useQueryState({
     path: `/customer/location/${customerId}`,
@@ -70,12 +70,13 @@ const CreateDbConfig = () => {
     if (isValidForm()) {
       const res = await dbConfig.create({ locationId, ...form });
       if (res.result) {
+        setToast(BASIC_MESSAGES.CREATED, TOAST.SUCCESS);
         backLocation();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -147,7 +148,6 @@ const CreateDbConfig = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

@@ -9,10 +9,9 @@ import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
   STATUS_MAP,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
-import { toast } from "react-toastify";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import useQueryState from "../../hooks/useQueryState";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -23,8 +22,10 @@ import {
 import { StaticSelectField } from "../../components/form/SelectField";
 import { parseDate } from "../../services/utils";
 import { LoadingDialog } from "../../components/page/Dialog";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const CreateLocation = () => {
+  const { setToast } = useGlobalContext();
   const { customerId } = useParams();
   const { handleNavigateBack: backLocation } = useQueryState({
     path: `/customer/location/${customerId}`,
@@ -92,12 +93,13 @@ const CreateLocation = () => {
     if (isValidForm()) {
       const res = await location.create({ customerId, ...form });
       if (res.result) {
+        setToast(BASIC_MESSAGES.CREATED, TOAST.SUCCESS);
         backLocation();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -201,7 +203,6 @@ const CreateLocation = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

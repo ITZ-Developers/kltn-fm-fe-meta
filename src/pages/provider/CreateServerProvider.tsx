@@ -8,14 +8,15 @@ import useApi from "../../hooks/useApi";
 import {
   BASIC_MESSAGES,
   BUTTON_TEXT,
+  TOAST,
   VALID_PATTERN,
 } from "../../services/constant";
-import { toast } from "react-toastify";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { LoadingDialog } from "../../components/page/Dialog";
 import useQueryState from "../../hooks/useQueryState";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const CreateServerProvider = () => {
+  const { setToast } = useGlobalContext();
   const { handleNavigateBack } = useQueryState({
     path: PAGE_CONFIG.SERVER_PROVIDER.path,
   });
@@ -63,12 +64,13 @@ const CreateServerProvider = () => {
     if (isValidForm()) {
       const res = await serverProvider.create(form);
       if (res.result) {
+        setToast(BASIC_MESSAGES.CREATED, TOAST.SUCCESS);
         handleNavigateBack();
       } else {
-        toast.error(res.message || BASIC_MESSAGES.FAILED);
+        setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);
       }
     } else {
-      toast.error(BASIC_MESSAGES.INVALID_FORM);
+      setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
     }
   };
 
@@ -177,7 +179,6 @@ const CreateServerProvider = () => {
                     </>
                   }
                 />
-                <MyToastContainer />
               </div>
             }
           />

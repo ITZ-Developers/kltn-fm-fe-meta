@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import {
   ActionDeleteButton,
   ActionEditButton,
@@ -6,6 +5,7 @@ import {
 import {
   configDeleteDialog,
   ConfirmationDialog,
+  LoadingDialog,
 } from "../../components/page/Dialog";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import useApi from "../../hooks/useApi";
@@ -16,9 +16,9 @@ import Sidebar from "../../components/page/Sidebar";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
 import InputBox from "../../components/page/InputBox";
 import { GridView } from "../../components/page/GridView";
-import MyToastContainer from "../../components/page/MyToastContainer";
 import { useLocation, useNavigate } from "react-router-dom";
 import { renderActionButton } from "../../components/ItemRender";
+import { useGlobalContext } from "../../components/GlobalProvider";
 
 const renderTenantCountField = (item: any) => {
   const percentage = (item.currentTenantCount / item.maxTenant) * 100;
@@ -58,6 +58,7 @@ const initQuery = {
 };
 
 const ServerProvider = () => {
+  const { setToast } = useGlobalContext();
   const { state } = useLocation();
   const navigate = useNavigate();
   const {
@@ -66,7 +67,8 @@ const ServerProvider = () => {
     hideModal: hideDeleteDialog,
     formConfig: deleteDialogConfig,
   } = useModal();
-  const { serverProvider } = useApi();
+  const { serverProvider, loading } = useApi();
+  const { serverProvider: providerList } = useApi();
   const {
     data,
     query,
@@ -75,7 +77,7 @@ const ServerProvider = () => {
     handlePageChange,
     handleSubmitQuery,
   } = useGridView({
-    fetchListApi: serverProvider.list,
+    fetchListApi: providerList.list,
     initQuery: state?.query || initQuery,
   });
 
@@ -123,7 +125,7 @@ const ServerProvider = () => {
         deleteApi: () => serverProvider.del(id),
         refreshData: () => handleSubmitQuery(query),
         hideModal: hideDeleteDialog,
-        toast,
+        setToast,
       })
     );
   };
@@ -146,7 +148,7 @@ const ServerProvider = () => {
       activeItem={PAGE_CONFIG.SERVER_PROVIDER.name}
       renderContent={
         <>
-          <MyToastContainer />
+          <LoadingDialog isVisible={loading} />
           <ToolBar
             searchBoxes={
               <>
