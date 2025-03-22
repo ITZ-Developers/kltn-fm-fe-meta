@@ -2,10 +2,12 @@ import { GridView } from "../../components/page/GridView";
 import Sidebar from "../../components/page/Sidebar";
 import useApi from "../../hooks/useApi";
 import {
+  basicRender,
   renderActionButton,
   renderEnum,
   renderHrefLink,
   renderImage,
+  renderLastLogin,
 } from "../../components/ItemRender";
 import { PAGE_CONFIG } from "../../components/PageConfig";
 import { CreateButton, ToolBar } from "../../components/page/ToolBar";
@@ -83,6 +85,7 @@ const Admin = () => {
       accessor: "group.name",
       align: ALIGNMENT.LEFT,
     },
+    renderLastLogin({}),
     renderEnum({}),
     renderActionButton({
       role: [

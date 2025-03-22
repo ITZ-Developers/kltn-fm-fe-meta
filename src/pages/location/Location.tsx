@@ -65,7 +65,7 @@ const renderExpiredDateField = (item: any) => {
         {truncateToDDMMYYYY(item.expiredDate)}
       </span>
       <span
-        className={`text-xs ${
+        className={`text-xs whitespace-nowrap ${
           isExpired
             ? "text-red-400"
             : isWarning

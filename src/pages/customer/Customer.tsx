@@ -29,6 +29,7 @@ import {
   renderEnum,
   renderHrefLink,
   renderImage,
+  renderLastLogin,
 } from "../../components/ItemRender";
 import { useGlobalContext } from "../../components/GlobalProvider";
 
@@ -50,8 +51,8 @@ const Customer = () => {
     hideModal: hideDeleteDialog,
     formConfig: deleteDialogConfig,
   } = useModal();
-  const { customer, loading } = useApi();
-  const { customer: customerList, admin, branch } = useApi();
+  const { customer, admin, loading } = useApi();
+  const { customer: customerList, admin: adminList, branch } = useApi();
   const {
     data,
     query,
@@ -89,6 +90,9 @@ const Customer = () => {
       accessor: "branch.name",
       align: ALIGNMENT.LEFT,
     },
+    renderLastLogin({
+      accessor: "account.lastLogin",
+    }),
     renderEnum({}),
     renderActionButton({
       role: [
@@ -169,7 +173,7 @@ const Customer = () => {
                   queryParams={{
                     kind: GROUP_KIND_MAP.CUSTOMER.value,
                   }}
-                  fetchListApi={admin.autoComplete}
+                  fetchListApi={adminList.autoComplete}
                   placeholder="Họ và tên..."
                   labelKey="fullName"
                 />

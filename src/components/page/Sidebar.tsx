@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { LOCAL_STORAGE } from "../../services/constant";
 import { getStorageData } from "../../services/storages";
 import MainHeader from "./MainHeader";
+import UnauthorizedDialog from "../../pages/auth/UnauthorizedDialog";
 
 const Sidebar = ({ activeItem, breadcrumbs, renderContent }: any) => {
   const { imgSrc, collapsedGroups, setCollapsedGroups, getSidebarMenus } =
@@ -37,6 +38,7 @@ const Sidebar = ({ activeItem, breadcrumbs, renderContent }: any) => {
 
   return (
     <>
+      <UnauthorizedDialog />
       <div className="flex min-h-screen">
         <div
           className={`

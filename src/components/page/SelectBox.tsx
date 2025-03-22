@@ -80,7 +80,7 @@ const StaticSelectBox = ({ placeholder, onChange, dataMap, value }: any) => {
                 onClick={() => handleSelect(item)}
               >
                 <span
-                  className={`px-2 py-1 rounded-md font-semibold text-sm ${item.className}`}
+                  className={`px-2 py-1 rounded-md font-semibold text-sm whitespace-nowrap ${item.className}`}
                 >
                   {item.label}
                 </span>
@@ -212,7 +212,7 @@ const SelectBox = ({
             items.map((item, index) => (
               <div
                 key={index}
-                className="p-2 hover:bg-gray-500 text-gray-100 cursor-pointer"
+                className="p-2 hover:bg-gray-500 text-gray-100 cursor-pointer whitespace-nowrap"
                 onClick={() => handleSelect(item)}
               >
                 {item[labelKey]}

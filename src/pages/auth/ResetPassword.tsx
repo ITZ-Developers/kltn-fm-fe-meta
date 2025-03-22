@@ -65,7 +65,6 @@ const ResetPassword = () => {
           color: "mediumseagreen",
           confirmText: BUTTON_TEXT.LOGIN,
           onConfirm: () => navigate("/"),
-          onCancel: () => navigate("/"),
         });
       } else {
         setToast(res.message || BASIC_MESSAGES.FAILED, TOAST.ERROR);

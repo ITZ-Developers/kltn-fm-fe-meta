@@ -13,6 +13,7 @@ import { PAGE_CONFIG, SIDEBAR_MENUS } from "./PageConfig";
 import { jwtDecode } from "jwt-decode";
 import { getRoles } from "../services/utils";
 import { toast } from "react-toastify";
+import useWebSocket from "../hooks/useWebSocket";
 
 const GlobalContext = createContext<{
   authorities: any;
@@ -27,6 +28,10 @@ const GlobalContext = createContext<{
   hasRoles: (role: string | string[]) => boolean;
   hasAnyRoles: (role: string | string[]) => boolean;
   setToast: (msg: string | null, type?: any) => void;
+  isUnauthorized: boolean;
+  setIsUnauthorized: Dispatch<SetStateAction<any>>;
+  message: any;
+  sendMessage: (message: any) => void;
 }>({
   authorities: [],
   imgSrc: null,
@@ -40,9 +45,15 @@ const GlobalContext = createContext<{
   hasRoles: () => false,
   hasAnyRoles: () => false,
   setToast: () => {},
+  isUnauthorized: false,
+  setIsUnauthorized: () => {},
+  message: null,
+  sendMessage: () => {},
 });
 
 export const GlobalProvider = ({ children }: any) => {
+  const { message, sendMessage } = useWebSocket();
+  const [isUnauthorized, setIsUnauthorized] = useState(false);
   const [authorities, setAuthorities] = useState<any>([]);
   const [imgSrc, setImgSrc] = useState<any>(banner);
   const [collapsedGroups, setCollapsedGroups] = useState(
@@ -126,6 +137,10 @@ export const GlobalProvider = ({ children }: any) => {
         hasRoles,
         hasAnyRoles,
         setToast,
+        isUnauthorized,
+        setIsUnauthorized,
+        message,
+        sendMessage,
       }}
     >
       {children}

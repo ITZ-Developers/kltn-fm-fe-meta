@@ -39,10 +39,12 @@ const ConfirmationDialog = ({
       <div className="flex flex-col w-full min-w-[20rem]">
         <div className="flex items-center justify-end">
           <div className="flex flex-row space-x-2">
-            <CancelButton
-              onClick={formConfig.onCancel}
-              text={BUTTON_TEXT.CANCEL}
-            />
+            {formConfig.onCancel && (
+              <CancelButton
+                onClick={formConfig.onCancel}
+                text={BUTTON_TEXT.CANCEL}
+              />
+            )}
             <SubmitButton
               onClick={formConfig.onConfirm}
               text={formConfig.confirmText}

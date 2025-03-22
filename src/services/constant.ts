@@ -12,6 +12,7 @@ const API_URL = {
   MASTER_API: "https://finance-master-jmdi.onrender.com",
   TENANT_API: "https://finance-tenant.onrender.com",
   MEDIA_API: "https://finance-media.onrender.com",
+  SOCKET_URL: "wss://finance-socket.onrender.com/ws",
 };
 
 const AUTH_TYPE = {
@@ -86,6 +87,11 @@ const GROUP_KIND_MAP = {
 const ITEMS_PER_PAGE = 10;
 const TRUNCATE_LENGTH = 150;
 const FETCH_INTERVAL = 300;
+const PING_INTERVAL = 5000; // 5s
+
+const SOCKET_CMD = {
+  CMD_LOCK_DEVICE: "CMD_LOCK_DEVICE",
+};
 
 const FILE_TYPES = {
   AVATAR: "AVATAR",
@@ -143,4 +149,6 @@ export {
   FETCH_INTERVAL,
   TRUNCATE_LENGTH,
   TOAST,
+  PING_INTERVAL,
+  SOCKET_CMD,
 };

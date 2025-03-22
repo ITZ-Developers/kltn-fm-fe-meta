@@ -6,7 +6,8 @@ import {
   LOCAL_STORAGE,
   METHOD,
 } from "../services/constant";
-import { getStorageData } from "../services/storages";
+import { getStorageData, removeSessionCache } from "../services/storages";
+import { useGlobalContext } from "../components/GlobalProvider";
 
 interface FetchOptions {
   apiUrl: string;
@@ -18,6 +19,7 @@ interface FetchOptions {
 }
 
 const useFetch = () => {
+  const { setIsUnauthorized } = useGlobalContext();
   const [loading, setLoading] = useState(false);
 
   const handleFetch = useCallback(async (options: FetchOptions) => {
@@ -61,6 +63,10 @@ const useFetch = () => {
               : JSON.stringify(options.payload)
             : undefined,
       });
+
+      if (response.status === 401) {
+        setIsUnauthorized(true);
+      }
 
       const contentType = response.headers.get("content-type");
       const data = contentType?.includes("application/json")

@@ -29,25 +29,33 @@ const getCurrentDate_2 = () => {
 };
 
 const convertUtcToVn = (date: string) => {
-  const [datePart, timePart] = date.split(" ");
-  const [day, month, year] = datePart.split("/").map(Number);
+  try {
+    const [datePart, timePart] = date.split(" ");
+    const [day, month, year] = datePart.split("/").map(Number);
+    const [hour, minute, second] = timePart.split(":").map(Number);
 
-  const isoString = new Date(
-    Date.UTC(year, month - 1, day, ...timePart.split(":").map(Number))
-  );
+    const utcDate = new Date(
+      Date.UTC(year, month - 1, day, hour, minute, second)
+    );
+    const vnDate = new Intl.DateTimeFormat("vi-VN", {
+      timeZone: "Asia/Ho_Chi_Minh",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    }).formatToParts(utcDate);
 
-  const vnTime = new Intl.DateTimeFormat("vi-VN", {
-    timeZone: "Asia/Ho_Chi_Minh",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  }).format(isoString);
-
-  return vnTime;
+    const getPart = (type: string) =>
+      vnDate.find((p) => p.type === type)?.value || "00";
+    return `${getPart("day")}/${getPart("month")}/${getPart("year")} ${getPart(
+      "hour"
+    )}:${getPart("minute")}:${getPart("second")}`;
+  } catch (error) {
+    return null;
+  }
 };
 
 const encrypt = (value: any, secretKey: any) => {
@@ -178,7 +186,7 @@ const parseToYYYYMMDD = (dateString: string): string => {
 };
 
 // Function to parse dd/mm/yyyy hh:mm:ss format to Date object
-const parseDate = (dateStr: string): Date | null => {
+const parseDate = (dateStr: any) => {
   try {
     const [datePart, timePart] = dateStr.split(" ");
     const [day, month, year] = datePart.split("/").map(Number);

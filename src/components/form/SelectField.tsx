@@ -147,7 +147,7 @@ const SelectField = ({
               items.map((item, index) => (
                 <div
                   key={index}
-                  className="p-2 hover:bg-gray-700 text-gray-200 cursor-pointer"
+                  className="p-2 hover:bg-gray-700 text-gray-200 cursor-pointer whitespace-nowrap"
                   onClick={() => handleSelect(item)}
                 >
                   {item[labelKey]}
@@ -275,7 +275,7 @@ const StaticSelectField = ({
                   onClick={() => handleSelect(item)}
                 >
                   <span
-                    className={`px-2 py-1 rounded-md font-semibold text-sm ${item.className}`}
+                    className={`px-2 py-1 rounded-md font-semibold text-sm whitespace-nowrap ${item.className}`}
                   >
                     {item.label}
                   </span>
