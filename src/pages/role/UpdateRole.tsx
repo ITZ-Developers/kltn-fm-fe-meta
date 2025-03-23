@@ -2,7 +2,12 @@ import { useParams } from "react-router-dom";
 import { LoadingDialog } from "../../components/page/Dialog";
 import { CancelButton, SubmitButton } from "../../components/form/Button";
 import { ActionSection, FormCard } from "../../components/form/FormCard";
-import { BASIC_MESSAGES, BUTTON_TEXT, TOAST } from "../../services/constant";
+import {
+  BASIC_MESSAGES,
+  BUTTON_TEXT,
+  GROUP_KIND_MAP,
+  TOAST,
+} from "../../services/constant";
 import useApi from "../../hooks/useApi";
 import useForm from "../../hooks/useForm";
 import { useEffect, useState } from "react";
@@ -60,9 +65,12 @@ const UpdateRole = () => {
           return;
         }
 
-        const permissionData = await permission.listPermissions({
-          kind: res.data.kind,
-        });
+        const kind =
+          GROUP_KIND_MAP.ADMIN.value === res?.data?.kind
+            ? GROUP_KIND_MAP.ADMIN.value
+            : GROUP_KIND_MAP.CUSTOMER.value;
+
+        const permissionData = await permission.listPermissions({ kind });
 
         if (!permissionData.result) {
           handleNavigateBack();
