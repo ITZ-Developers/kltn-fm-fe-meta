@@ -84,12 +84,17 @@ const useFetch = () => {
   const fetchApi = (options: FetchOptions) => {
     if (options.payload && !(options.payload instanceof FormData)) {
       options.payload = Object.fromEntries(
-        Object.entries(options.payload).filter(
-          ([_, value]) =>
-            value !== null &&
-            value !== undefined &&
-            !(typeof value === "string" && value.trim() === "")
-        )
+        Object.entries(options.payload).filter(([_, value]) => {
+          if (value === null || value === undefined) return false;
+          if (
+            options.method === METHOD.GET &&
+            typeof value === "string" &&
+            value.trim() === ""
+          ) {
+            return false;
+          }
+          return true;
+        })
       );
     }
     if (options.method === METHOD.GET && options.payload) {
