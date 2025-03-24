@@ -65,7 +65,7 @@ const Login = () => {
       setStorageData(LOCAL_STORAGE.ACCESS_TOKEN, res?.access_token);
       window.location.href = "/";
     } else {
-      setToast(BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
+      setToast(res?.message || BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
     }
   };
 
@@ -76,7 +76,7 @@ const Login = () => {
         password: form.password,
       });
       if (!verify?.result) {
-        setToast(BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
+        setToast(verify?.message || BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
         return;
       }
       const data = verify.data;
@@ -106,7 +106,7 @@ const Login = () => {
         setStorageData(LOCAL_STORAGE.ACCESS_TOKEN, res?.access_token);
         window.location.href = "/";
       } else {
-        setToast(BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
+        setToast(res?.message || BASIC_MESSAGES.LOG_IN_FAILED, TOAST.ERROR);
       }
     } else {
       setToast(BASIC_MESSAGES.INVALID_FORM, TOAST.ERROR);
