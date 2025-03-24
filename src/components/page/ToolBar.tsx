@@ -10,7 +10,7 @@ const CreateButton = ({ role, onClick }: any) => {
   return (
     <button
       onClick={onClick}
-      className="whitespace-nowrap bg-gray-600 hover:bg-gray-700 text-gray-100 p-2 rounded-lg flex items-center transition-colors duration-200"
+      className="ml-2 whitespace-nowrap bg-gray-600 hover:bg-gray-700 text-gray-100 p-2 rounded-lg flex items-center transition-colors duration-200"
     >
       <PlusIcon size={20} className="mr-1" />
       {BUTTON_TEXT.CREATE}
