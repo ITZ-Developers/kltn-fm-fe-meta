@@ -51,7 +51,8 @@ const AccountBranch = () => {
     hideModal: hideDeleteDialog,
     formConfig: deleteDialogConfig,
   } = useModal();
-  const { accountBranch: accountBranchList, branch, admin } = useApi();
+  const { accountBranch: accountBranchList, loading: loadingList } = useApi();
+  const { branch, admin } = useApi();
   const { accountBranch, loading } = useApi();
   const {
     data,
@@ -184,6 +185,7 @@ const AccountBranch = () => {
             }
           />
           <GridView
+            isLoading={loadingList}
             data={data}
             columns={columns}
             currentPage={query.page}

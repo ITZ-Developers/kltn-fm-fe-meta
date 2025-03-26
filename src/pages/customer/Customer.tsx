@@ -52,7 +52,8 @@ const Customer = () => {
     formConfig: deleteDialogConfig,
   } = useModal();
   const { customer, admin, loading } = useApi();
-  const { customer: customerList, admin: adminList, branch } = useApi();
+  const { customer: customerList, loading: loadingList } = useApi();
+  const { admin: adminList, branch } = useApi();
   const {
     data,
     query,
@@ -205,6 +206,7 @@ const Customer = () => {
             }
           />
           <GridView
+            isLoading={loadingList}
             data={data}
             columns={columns}
             currentPage={query.page}

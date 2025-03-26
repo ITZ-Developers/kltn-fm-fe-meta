@@ -119,7 +119,8 @@ const Location = () => {
     formConfig: deleteDialogConfig,
   } = useModal();
   const { location, loading } = useApi();
-  const { location: locationList, customer } = useApi();
+  const { location: locationList, loading: loadingList } = useApi();
+  const { customer } = useApi();
   const {
     data,
     query,
@@ -300,6 +301,7 @@ const Location = () => {
             }
           />
           <GridView
+            isLoading={loadingList}
             data={data}
             columns={columns}
             currentPage={query.page}

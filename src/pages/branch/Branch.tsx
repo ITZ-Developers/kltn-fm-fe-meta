@@ -54,7 +54,7 @@ const Branch = () => {
     hideModal: hideDeleteDialog,
     formConfig: deleteDialogConfig,
   } = useModal();
-  const { branch: branchForList } = useApi();
+  const { branch: branchForList, loading: loadingList } = useApi();
   const { branch, loading } = useApi();
   const {
     data,
@@ -180,6 +180,7 @@ const Branch = () => {
             }
           />
           <GridView
+            isLoading={loadingList}
             data={data}
             columns={columns}
             currentPage={query.page}

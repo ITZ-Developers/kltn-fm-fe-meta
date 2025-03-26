@@ -68,7 +68,7 @@ const ServerProvider = () => {
     formConfig: deleteDialogConfig,
   } = useModal();
   const { serverProvider, loading } = useApi();
-  const { serverProvider: providerList } = useApi();
+  const { serverProvider: providerList, loading: loadingList } = useApi();
   const {
     data,
     query,
@@ -171,6 +171,7 @@ const ServerProvider = () => {
             }
           />
           <GridView
+            isLoading={loadingList}
             data={data}
             columns={columns}
             currentPage={query.page}
