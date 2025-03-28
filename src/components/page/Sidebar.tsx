@@ -130,7 +130,7 @@ const Sidebar = ({ activeItem, breadcrumbs, renderContent }: any) => {
             </div>
 
             <div
-              className={`p-4 flex-1 transition-all duration-300 md:ml-80 overflow-y-hidden`}
+              className={`p-4 flex-1 transition-all duration-300 md:ml-80 min-h-screen overflow-y-hidden`}
             >
               {renderContent}
             </div>
