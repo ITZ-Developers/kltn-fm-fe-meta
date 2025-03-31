@@ -12,10 +12,12 @@ import { OptionButton } from "../form/Button";
 import InputKey from "../../pages/auth/InputKey";
 import ClearKey from "../../pages/auth/ClearKey";
 import useApi from "../../hooks/useApi";
+import VerifyBackup from "../../pages/auth/VerifyBackup";
+import PushBackup from "../../pages/auth/PushBackup";
 
 const MainHeader = ({ breadcrumbs }: any) => {
   const { setToast } = useGlobalContext();
-  const { auth, loading } = useApi();
+  const { auth, media, loading } = useApi();
   const { profile } = useGlobalContext();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -32,6 +34,18 @@ const MainHeader = ({ breadcrumbs }: any) => {
     showModal: showClearKeyForm,
     hideModal: hideClearKeyForm,
     formConfig: clearKeyFormConfig,
+  } = useModal();
+  const {
+    isModalVisible: verifyBackupVisible,
+    showModal: showVerifyBackupForm,
+    hideModal: hideVerifyBackupForm,
+    formConfig: verifyBackupConfig,
+  } = useModal();
+  const {
+    isModalVisible: pushBackupVisible,
+    showModal: showPushBackupForm,
+    hideModal: hidePushBackupForm,
+    formConfig: pushBackupConfig,
   } = useModal();
 
   useEffect(() => {
@@ -99,6 +113,26 @@ const MainHeader = ({ breadcrumbs }: any) => {
     );
   };
 
+  const handleDownLoadBackup = () => {
+    setIsDropdownOpen(false);
+    showVerifyBackupForm(
+      configModalForm({
+        label: "Tải tệp phục hồi tệp tin",
+        fetchApi: media.downloadBackup,
+        hideModal: hideVerifyBackupForm,
+        setToast,
+        initForm: { apiKey: "" },
+      })
+    );
+  };
+
+  const handlePushBackup = () => {
+    setIsDropdownOpen(false);
+    showPushBackupForm({
+      hideModal: hidePushBackupForm,
+    });
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
@@ -115,6 +149,11 @@ const MainHeader = ({ breadcrumbs }: any) => {
         isVisible={clearKeyFormVisible}
         formConfig={clearKeyFormConfig}
       />
+      <VerifyBackup
+        isVisible={verifyBackupVisible}
+        formConfig={verifyBackupConfig}
+      />
+      <PushBackup isVisible={pushBackupVisible} formConfig={pushBackupConfig} />
       <header className="flex items-center justify-between w-full text-white">
         <div className="flex-1 min-w-0">
           <Breadcrumb items={breadcrumbs} />
@@ -161,6 +200,18 @@ const MainHeader = ({ breadcrumbs }: any) => {
                 label={PAGE_CONFIG.CLEAR_KEY.label}
                 onClick={handleClearKey}
               />
+              {profile.isSuperAdmin && (
+                <>
+                  <OptionButton
+                    label={"Tải tệp phục hồi tệp tin"}
+                    onClick={handleDownLoadBackup}
+                  />
+                  <OptionButton
+                    label={"Nhập tệp phục hồi tệp tin"}
+                    onClick={handlePushBackup}
+                  />
+                </>
+              )}
               <OptionButton label="Đăng xuất" onClick={handleLogout} />
             </div>
           )}

@@ -6,7 +6,7 @@ import {
   LOCAL_STORAGE,
   METHOD,
 } from "../services/constant";
-import { getStorageData, removeSessionCache } from "../services/storages";
+import { getStorageData } from "../services/storages";
 import { useGlobalContext } from "../components/GlobalProvider";
 
 interface FetchOptions {
@@ -64,16 +64,47 @@ const useFetch = () => {
             : undefined,
       });
 
-      if (response.status === 401) {
-        setIsUnauthorized(true);
+      const contentDisposition = response.headers.get("content-disposition");
+      const isFileDownload = contentDisposition
+        ?.toLowerCase()
+        .includes("attachment");
+
+      if (isFileDownload) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+
+        const filename = contentDisposition
+          ?.split("filename=")[1]
+          ?.replace(/"/g, "");
+
+        if (!filename) {
+          return {
+            result: false,
+            message: "File downloaded failed",
+          };
+        }
+
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        return { result: true, message: "File downloaded successfully" };
+      } else {
+        if (response.status === 401) {
+          setIsUnauthorized(true);
+        }
+
+        const contentType = response.headers.get("content-type");
+        const data = contentType?.includes("application/json")
+          ? await response.json()
+          : await response.text();
+
+        return data;
       }
-
-      const contentType = response.headers.get("content-type");
-      const data = contentType?.includes("application/json")
-        ? await response.json()
-        : await response.text();
-
-      return data;
     } catch (err: any) {
       return { message: err.message || BASIC_MESSAGES.FAILED };
     } finally {

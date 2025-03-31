@@ -72,7 +72,7 @@ const TextAreaField = ({
   placeholder = "",
   onChangeText,
   error = "",
-  maxLength = 500,
+  maxLength = 1000,
 }: any) => {
   return (
     <div className="flex-1 items-center">
