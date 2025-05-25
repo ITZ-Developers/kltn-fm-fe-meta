@@ -17,7 +17,7 @@ import PushBackup from "../../pages/auth/PushBackup";
 
 const MainHeader = ({ breadcrumbs }: any) => {
   const { setToast } = useGlobalContext();
-  const { auth, media, loading } = useApi();
+  const { auth, loading } = useApi();
   const { profile } = useGlobalContext();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -113,26 +113,6 @@ const MainHeader = ({ breadcrumbs }: any) => {
     );
   };
 
-  const handleDownLoadBackup = () => {
-    setIsDropdownOpen(false);
-    showVerifyBackupForm(
-      configModalForm({
-        label: "Tải tệp phục hồi tệp tin",
-        fetchApi: media.downloadBackup,
-        hideModal: hideVerifyBackupForm,
-        setToast,
-        initForm: { apiKey: "" },
-      })
-    );
-  };
-
-  const handlePushBackup = () => {
-    setIsDropdownOpen(false);
-    showPushBackupForm({
-      hideModal: hidePushBackupForm,
-    });
-  };
-
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
@@ -200,18 +180,6 @@ const MainHeader = ({ breadcrumbs }: any) => {
                 label={PAGE_CONFIG.CLEAR_KEY.label}
                 onClick={handleClearKey}
               />
-              {profile.isSuperAdmin && (
-                <>
-                  <OptionButton
-                    label={"Tải tệp phục hồi tệp tin"}
-                    onClick={handleDownLoadBackup}
-                  />
-                  <OptionButton
-                    label={"Nhập tệp phục hồi tệp tin"}
-                    onClick={handlePushBackup}
-                  />
-                </>
-              )}
               <OptionButton label="Đăng xuất" onClick={handleLogout} />
             </div>
           )}
